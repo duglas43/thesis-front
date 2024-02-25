@@ -10,10 +10,11 @@ import {
 } from "@src/store/users";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
-import { centerContainerSx } from "@src/styles/styles";
-import { singUpContainerSx } from "./styles";
+import { useTranslation } from "react-i18next";
+import { signUpWidgetCardSx } from "./styles";
 
-export const SignUpPage: FC = () => {
+export const SignUpWidget: FC = () => {
+  const { t } = useTranslation();
   const [signUp] = useAuthControllerSignUpMutation();
   const { isSuccess } =
     enhancedApi.endpoints.usersControllerFindMe.useQueryState();
@@ -31,35 +32,33 @@ export const SignUpPage: FC = () => {
     }
   }, [isSuccess, navigate, getMe]);
   return (
-    <Box sx={centerContainerSx}>
-      <Box sx={singUpContainerSx}>
-        <Typography variant="h6" component="h1" sx={{ textAlign: "center" }}>
-          Sign Up
-        </Typography>
+    <Box sx={signUpWidgetCardSx}>
+      <Typography variant="h6" component="h1" sx={{ textAlign: "center" }}>
+        {t("signUp")}
+      </Typography>
 
-        <Typography variant="subtitle1" component="p" sx={{ mb: 2 }}>
-          Please enter your user information
-        </Typography>
-        <SignUpForm onSubmit={handleSubmit} />
+      <Typography variant="subtitle1" component="p" sx={{ mb: 2 }}>
+        {t("pleaseEnterYourUserInformation")}
+      </Typography>
+      <SignUpForm onSubmit={handleSubmit} />
 
-        <Typography
-          variant="subtitle1"
-          component="a"
-          href="/signin"
-          sx={{
-            color: "primary.main",
-            textDecoration: "none",
-            mt: 2,
-            display: "block",
-          }}
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("/signin");
-          }}
-        >
-          Already have an account? Sign In
-        </Typography>
-      </Box>
+      <Typography
+        variant="subtitle1"
+        component="a"
+        href="/signin"
+        sx={{
+          color: "primary.main",
+          textDecoration: "none",
+          mt: 2,
+          display: "block",
+        }}
+        onClick={(e) => {
+          e.preventDefault();
+          navigate("/signin");
+        }}
+      >
+        {t("alreadyHaveAnAccountSignIn")}
+      </Typography>
     </Box>
   );
 };

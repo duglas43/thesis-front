@@ -4,18 +4,20 @@ import { AuthControllerSignInApiArg, SignInDto } from "@src/store/auth";
 import * as yup from "yup";
 import { TextField, Button, Box } from "@mui/material";
 import { signInFormSx } from "./styles";
+import { useTranslation } from "react-i18next";
 
 export interface SignInFormProps {
   onSubmit: (values: AuthControllerSignInApiArg) => void;
 }
 
 export const SignInForm: FC<SignInFormProps> = ({ onSubmit }) => {
+  const { t } = useTranslation();
   const validationSchema = yup.object().shape({
-    login: yup.string().required("Login is required"),
-    password: yup.string().required("Password is required"),
+    email: yup.string().required(t("emailIsRequired") || "emailIsRequired"),
+    password: yup.string().required(t("passwordIsRequired")),
   });
   const initialValues: SignInDto = {
-    login: "",
+    email: "",
     password: "",
   };
 
@@ -32,17 +34,17 @@ export const SignInForm: FC<SignInFormProps> = ({ onSubmit }) => {
     <Box component="form" sx={signInFormSx} onSubmit={formik.handleSubmit}>
       <TextField
         fullWidth
-        id="login"
-        name="login"
-        label="Login"
+        id="email"
+        name="email"
+        label={t("email")}
         type="text"
         size="small"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
-        value={formik.values.login}
-        error={formik.touched.login && !!formik.errors.login}
+        value={formik.values.email}
+        error={formik.touched.email && !!formik.errors.email}
         helperText={
-          formik.touched.login && formik.errors.login && formik.errors.login
+          formik.touched.email && formik.errors.email && formik.errors.email
         }
       />
 
@@ -50,7 +52,7 @@ export const SignInForm: FC<SignInFormProps> = ({ onSubmit }) => {
         fullWidth
         id="password"
         name="password"
-        label="Password"
+        label={t("password")}
         type="password"
         size="small"
         onChange={formik.handleChange}
@@ -64,7 +66,7 @@ export const SignInForm: FC<SignInFormProps> = ({ onSubmit }) => {
         }
       />
       <Button fullWidth type="submit" variant="contained">
-        Submit
+        {t("signIn")}
       </Button>
     </Box>
   );

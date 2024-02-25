@@ -16,7 +16,7 @@ export interface SidebarProps {
 
 export const Sidebar: FC<SidebarProps> = ({ schema }) => {
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t } = useTranslation() as any;
   const navigate = useNavigate();
   const handleListItemClick = (link: string) => {
     navigate(link);

@@ -1,6 +1,6 @@
 import { SxProps, Theme } from "@mui/system";
 
-export const singUpContainerSx: SxProps<Theme> = () => ({
+export const signUpWidgetCardSx: SxProps<Theme> = () => ({
   maxWidth: "400px",
   width: "100%",
   backgroundColor: "#fff",

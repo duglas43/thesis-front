@@ -1,10 +1,11 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { useFormik } from "formik";
 import { AuthControllerSignUpApiArg, SignUpDto } from "@src/store/auth";
 import * as yup from "yup";
 import { TextField, Button, Box } from "@mui/material";
 import { signUpFormSx } from "./styles";
 import { useTranslation } from "react-i18next";
+import { normalizeFormikValues } from "@src/utils";
 
 export interface SignUpFormProps {
   onSubmit: (values: AuthControllerSignUpApiArg) => void;
@@ -13,17 +14,16 @@ export interface SignUpFormProps {
 export const SignUpForm: FC<SignUpFormProps> = ({ onSubmit }) => {
   const { t } = useTranslation();
   const validationSchema = yup.object().shape({
-    login: yup.string().required("Login is required"),
-    password: yup.string().required("Password is required"),
-    firstName: yup.string(),
-    lastName: yup.string(),
+    email: yup.string().required(t("emailIsRequired")),
+    password: yup.string().required(t("passwordIsRequired")),
+    firstName: yup.string().required(t("firstNameIsRequired")),
+    lastName: yup.string().required(t("lastNameIsRequired")),
     patronymic: yup.string(),
-    confirm: yup.string().oneOf([yup.ref("password")], "Passwords must match"),
-    avatarId: yup.number().optional(),
+    confirm: yup.string().oneOf([yup.ref("password")], t("passwordsMustMatch")),
   });
 
   const initialValues: SignUpDto & { confirm: string } = {
-    login: "",
+    email: "",
     password: "",
     confirm: "",
     firstName: "",
@@ -35,7 +35,7 @@ export const SignUpForm: FC<SignUpFormProps> = ({ onSubmit }) => {
     validationSchema,
     onSubmit: ({ confirm, ...args }) => {
       onSubmit({
-        signUpDto: args,
+        signUpDto: normalizeFormikValues<SignUpDto>(args),
       });
     },
   });
@@ -92,14 +92,14 @@ export const SignUpForm: FC<SignUpFormProps> = ({ onSubmit }) => {
 
       <TextField
         fullWidth
-        id="login"
-        label={t("login")}
+        id="email"
+        label={t("email")}
         type="text"
         size="small"
-        {...formik.getFieldProps("login")}
-        error={formik.touched.login && !!formik.errors.login}
+        {...formik.getFieldProps("email")}
+        error={formik.touched.email && !!formik.errors.email}
         helperText={
-          formik.touched.login && formik.errors.login && formik.errors.login
+          formik.touched.email && formik.errors.email && formik.errors.email
         }
       />
       <TextField
@@ -124,9 +124,14 @@ export const SignUpForm: FC<SignUpFormProps> = ({ onSubmit }) => {
         size="small"
         {...formik.getFieldProps("confirm")}
         error={formik.touched.confirm && !!formik.errors.confirm}
+        helperText={
+          formik.touched.confirm &&
+          formik.errors.confirm &&
+          formik.errors.confirm
+        }
       />
       <Button fullWidth type="submit" variant="contained">
-        Submit
+        {t("signUp")}
       </Button>
     </Box>
   );

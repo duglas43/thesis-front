@@ -53,14 +53,14 @@ export type AccessDto = {
   access_token: string;
 };
 export type SignUpDto = {
-  login: string;
+  email: string;
   password: string;
   firstName?: string;
   lastName?: string;
   patronymic?: string;
 };
 export type SignInDto = {
-  login: string;
+  email: string;
   password: string;
 };
 export const {

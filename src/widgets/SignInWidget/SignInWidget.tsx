@@ -10,10 +10,11 @@ import {
 } from "@src/store/users";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
-import { signInCardSx } from "./styles";
-import { centerContainerSx } from "@src/styles/styles";
+import { signInWidgetCardSx } from "./styles";
+import { useTranslation } from "react-i18next";
 
-export const SignInPage: FC = () => {
+export const SignInWidget: FC = () => {
+  const { t } = useTranslation();
   const [signIn] = useAuthControllerSignInMutation();
   const { isSuccess } =
     enhancedApi.endpoints.usersControllerFindMe.useQueryState();
@@ -35,33 +36,31 @@ export const SignInPage: FC = () => {
     }
   }, [isSuccess, navigate, getMe]);
   return (
-    <Box sx={centerContainerSx}>
-      <Box sx={signInCardSx}>
-        <Typography
-          variant="h6"
-          component="h1"
-          sx={{ textAlign: "center", mb: 1 }}
-        >
-          Sign In
-        </Typography>
+    <Box sx={signInWidgetCardSx}>
+      <Typography
+        variant="h6"
+        component="h1"
+        sx={{ textAlign: "center", mb: 1 }}
+      >
+        {t("signIn")}
+      </Typography>
 
-        <SignInForm onSubmit={handleSubmit} />
+      <SignInForm onSubmit={handleSubmit} />
 
-        <Typography
-          variant="subtitle1"
-          component="a"
-          href="/signup"
-          sx={{
-            color: "primary.main",
-            textDecoration: "none",
-            mt: 2,
-            display: "block",
-          }}
-          onClick={handleSignUpClick}
-        >
-          Create an account
-        </Typography>
-      </Box>
+      <Typography
+        variant="subtitle1"
+        component="a"
+        href="/signup"
+        sx={{
+          color: "primary.main",
+          textDecoration: "none",
+          mt: 2,
+          display: "block",
+        }}
+        onClick={handleSignUpClick}
+      >
+        {t("dontHaveAnAccountSignUp")}
+      </Typography>
     </Box>
   );
 };

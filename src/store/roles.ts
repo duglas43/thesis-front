@@ -165,15 +165,14 @@ export type RoleDto = {
   createdAt: string;
   updatedAt: string;
 };
+export type Languages = "en" | "it" | "de" | "fr" | "es" | "tr" | "nl";
 export type UserDto = {
   id: number;
-  login: string;
+  email: string;
   firstName?: string | null;
   lastName?: string | null;
   patronymic?: string | null;
-  language: "en" | "it" | "de" | "fr" | "es" | "tr" | "nl";
-  email?: string | null;
-  lastVisit?: boolean;
+  language: Languages;
   createdAt: string;
   updatedAt: string;
 };
@@ -185,6 +184,7 @@ export type UpdateRoleDto = {
   name?: string;
   description?: string;
 };
+export type Actions = "manage" | "create" | "read" | "update" | "delete";
 export type PermissionFieldDto = {
   id: string;
   permissionId: string;
@@ -204,7 +204,7 @@ export type PermissionDto = {
   id: string;
   subjectId: string;
   modality: boolean;
-  action: "manage" | "create" | "read" | "update" | "delete";
+  action: Actions;
   fields: PermissionFieldDto[];
   conditions: PermissionConditionDto[];
   reason: string | null;

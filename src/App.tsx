@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Route, Routes } from "react-router-dom";
-import { SignInPage, SignUpPage, NotFoundPage } from "./pages";
+import { SignInPage, SignUpPage, NotFoundPage, UsersPage } from "./pages";
 import { useUsersControllerFindMeQuery } from "./store/users";
 import { AppLayout, AuthProtect } from "./layouts";
 import { useLanguageListener } from "@src/hooks";
@@ -17,7 +17,7 @@ const App: FC = () => {
         <Route path="/" element={<AuthProtect />}>
           <Route path="/" element={<AppLayout />}>
             {data ? (
-              <></>
+              <Route path="/" element={<UsersPage />} />
             ) : (
               <>
                 <Route path="/*" element={<NotFoundPage />} />

@@ -17,7 +17,13 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/users`,
-        params: { query: queryArg.query },
+        params: {
+          query: queryArg.query,
+          sort: queryArg.sort,
+          order: queryArg.order,
+          limit: queryArg.limit,
+          page: queryArg.page,
+        },
       }),
     }),
     usersControllerFindMe: build.query<
@@ -108,9 +114,16 @@ export type UsersControllerCreateApiResponse = /** status 201  */ UserDto;
 export type UsersControllerCreateApiArg = {
   createUserDto: CreateUserDto;
 };
-export type UsersControllerFindAllApiResponse = /** status 200  */ UserDto[];
+export type UsersControllerFindAllApiResponse = /** status 200  */ {
+  content?: UserDto[];
+  meta?: MetaDto;
+};
 export type UsersControllerFindAllApiArg = {
   query: string;
+  sort?: string;
+  order?: Order;
+  limit?: number;
+  page?: number;
 };
 export type UsersControllerFindMeApiResponse = /** status 200  */ UserDto;
 export type UsersControllerFindMeApiArg = void;
@@ -166,37 +179,42 @@ export type UsersControllerRemovePermissionsApiArg = {
     permissionIds?: number[];
   };
 };
+export type Languages = "en" | "it" | "de" | "fr" | "es" | "tr" | "nl";
 export type UserDto = {
   id: number;
-  login: string;
+  email: string;
   firstName?: string | null;
   lastName?: string | null;
   patronymic?: string | null;
-  language: "en" | "it" | "de" | "fr" | "es" | "tr" | "nl";
-  email?: string | null;
-  lastVisit?: boolean;
+  language: Languages;
   createdAt: string;
   updatedAt: string;
 };
 export type CreateUserDto = {
-  login: string;
+  email: string;
   password: string;
   firstName?: string;
   lastName?: string;
   patronymic?: string;
-  language?: "en" | "it" | "de" | "fr" | "es" | "tr" | "nl";
-  email?: string;
-  phone?: string;
+  language?: Languages;
   roleIds?: string[];
 };
+export type Order = "ASC" | "DESC";
+export type MetaDto = {
+  totalCount: number;
+  pageCount: number;
+  resultCount: number;
+  page: number;
+  limit: number;
+  order: Order;
+  sort: string;
+};
 export type UpdateUserDto = {
-  login?: string;
+  email?: string;
   firstName?: string;
   lastName?: string;
   patronymic?: string;
-  language?: "en" | "it" | "de" | "fr" | "es" | "tr" | "nl";
-  email?: string;
-  phone?: string;
+  language?: Languages;
   roleIds?: string[];
 };
 export type RoleDto = {
@@ -206,6 +224,7 @@ export type RoleDto = {
   createdAt: string;
   updatedAt: string;
 };
+export type Actions = "manage" | "create" | "read" | "update" | "delete";
 export type PermissionFieldDto = {
   id: string;
   permissionId: string;
@@ -225,7 +244,7 @@ export type PermissionDto = {
   id: string;
   subjectId: string;
   modality: boolean;
-  action: "manage" | "create" | "read" | "update" | "delete";
+  action: Actions;
   fields: PermissionFieldDto[];
   conditions: PermissionConditionDto[];
   reason: string | null;

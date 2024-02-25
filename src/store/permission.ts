@@ -294,6 +294,7 @@ export type PermissionsControllerRemoveApiResponse =
 export type PermissionsControllerRemoveApiArg = {
   id: number;
 };
+export type Actions = "manage" | "create" | "read" | "update" | "delete";
 export type PermissionFieldDto = {
   id: string;
   permissionId: string;
@@ -313,7 +314,7 @@ export type PermissionDto = {
   id: string;
   subjectId: string;
   modality: boolean;
-  action: "manage" | "create" | "read" | "update" | "delete";
+  action: Actions;
   fields: PermissionFieldDto[];
   conditions: PermissionConditionDto[];
   reason: string | null;
@@ -351,7 +352,7 @@ export type CreatePermissionDto = {
   fields?: PermissionField[];
   conditions?: PermissionCondition[];
   reason?: string;
-  action: "manage" | "create" | "read" | "update" | "delete";
+  action: Actions;
 };
 export type UpdatePermissionDto = {
   subjectId: number;
