@@ -1,0 +1,4739 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": { "200": { "description": "" } }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "operationId": "AuthController_signUp",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SignUpDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AccessDto" }
+              }
+            }
+          },
+          "400": {
+            "description": "User with login ${dto.login} already exists"
+          }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "operationId": "AuthController_signIn",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SignInDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AccessDto" }
+              }
+            }
+          },
+          "403": { "description": "Incorrect login or password" }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AccessDto" }
+              }
+            }
+          },
+          "403": { "description": "Incorrect refresh token" }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AccessDto" }
+              }
+            }
+          }
+        },
+        "tags": ["auth"]
+      }
+    },
+    "/users": {
+      "post": {
+        "operationId": "UsersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateUserDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "UsersController_findAll",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/UserDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/users/me": {
+      "get": {
+        "operationId": "UsersController_findMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "UsersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateUserDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/users/{id}/roles": {
+      "get": {
+        "operationId": "UsersController_findRoles",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/RoleDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      },
+      "post": {
+        "operationId": "UsersController_addRoles",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "roleIds": { "type": "array", "items": { "type": "number" } }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "UsersController_removeRoles",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "roleIds": { "type": "array", "items": { "type": "number" } }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/users/{id}/permissions": {
+      "get": {
+        "operationId": "UsersController_findPermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PermissionDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      },
+      "post": {
+        "operationId": "UsersController_addPermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "permissionIds": {
+                    "type": "array",
+                    "items": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PermissionDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "UsersController_removePermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "permissionIds": {
+                    "type": "array",
+                    "items": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PermissionDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/roles": {
+      "post": {
+        "operationId": "RolesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateRoleDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RoleDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["roles"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "RolesController_findAll",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/RoleDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["roles"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/roles/{id}": {
+      "get": {
+        "operationId": "RolesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RoleDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["roles"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "RolesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateRoleDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RoleDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["roles"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "RolesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RoleDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["roles"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/roles/{id}/permissions": {
+      "get": {
+        "operationId": "RolesController_findPermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PermissionDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["roles"],
+        "security": [{ "bearer": [] }]
+      },
+      "post": {
+        "operationId": "RolesController_addPermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "permissionsId": {
+                    "type": "array",
+                    "items": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PermissionDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["roles"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "RolesController_removePermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "permissionsId": {
+                    "type": "array",
+                    "items": { "type": "number" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PermissionDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["roles"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/details": {
+      "post": {
+        "operationId": "DetailsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateDetailDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DetailDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["details"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "DetailsController_findAll",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/DetailDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["details"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/details/{id}": {
+      "get": {
+        "operationId": "DetailsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DetailDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["details"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "DetailsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateDetailDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DetailDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["details"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "DetailsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DetailDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["details"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/details/{id}/param": {
+      "post": {
+        "operationId": "DetailsController_addParam",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "paramId": { "type": "integer" },
+                  "value": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "" },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["details"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/details/{id}/param/{paramId}": {
+      "delete": {
+        "operationId": "DetailsController_removeParam",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "paramId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "" },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["details"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/machines": {
+      "post": {
+        "operationId": "MachinesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateMachineDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MachineDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["machines"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "MachinesController_findAll",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/MachineDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["machines"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/machines/{id}": {
+      "get": {
+        "operationId": "MachinesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MachineDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["machines"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "MachinesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateMachineDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MachineDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["machines"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "MachinesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MachineDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["machines"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/params": {
+      "post": {
+        "operationId": "ParamsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateParamDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ParamDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["params"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "ParamsController_findAll",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ParamDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["params"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/params/{id}": {
+      "get": {
+        "operationId": "ParamsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ParamDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["params"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "ParamsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateParamDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ParamDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["params"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "ParamsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ParamDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["params"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/addresses": {
+      "post": {
+        "operationId": "AddressesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateAddressDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AddressDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["addresses"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "AddressesController_findAll",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/AddressDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["addresses"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/addresses/{id}": {
+      "get": {
+        "operationId": "AddressesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AddressDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["addresses"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "AddressesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateAddressDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AddressDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["addresses"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "AddressesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AddressDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["addresses"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/orders": {
+      "post": {
+        "operationId": "OrdersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateOrderDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OrderDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["orders"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "OrdersController_findAll",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/OrderDto" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["orders"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "operationId": "OrdersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OrderDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["orders"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "OrdersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateOrderDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OrderDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["orders"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "OrdersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OrderDto" }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["orders"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/orders/{id}/machine": {
+      "post": {
+        "operationId": "OrdersController_addMachine",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "machineId": { "type": "number" },
+                  "count": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "" },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["orders"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/orders/{id}/machine/{machineId}": {
+      "delete": {
+        "operationId": "OrdersController_removeMachine",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          },
+          {
+            "name": "machineId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "" },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Unauthorized" },
+                    "statusCode": { "type": "number", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Forbidden resource"
+                    },
+                    "error": { "type": "string", "example": "Forbidden" },
+                    "statusCode": { "type": "number", "example": 403 }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Not found" },
+                    "statusCode": { "type": "number", "example": 404 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["orders"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "ok" },
+                    "info": {
+                      "type": "object",
+                      "example": { "database": { "status": "up" } },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": { "status": { "type": "string" } },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {},
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": { "status": { "type": "string" } },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": { "database": { "status": "up" } },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": { "status": { "type": "string" } },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "error" },
+                    "info": {
+                      "type": "object",
+                      "example": { "database": { "status": "up" } },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": { "status": { "type": "string" } },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": { "status": { "type": "string" } },
+                        "additionalProperties": true
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": { "status": "up" },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "required": ["status"],
+                        "properties": { "status": { "type": "string" } },
+                        "additionalProperties": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["health"]
+      }
+    },
+    "/permission-fields": {
+      "post": {
+        "operationId": "PermissionFieldsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePermissionFieldDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PermissionFieldDto" }
+              }
+            }
+          }
+        },
+        "tags": ["permission-fields"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "PermissionFieldsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PermissionFieldDto" }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["permission-fields"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/permission-fields/{id}": {
+      "get": {
+        "operationId": "PermissionFieldsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PermissionFieldDto" }
+              }
+            }
+          }
+        },
+        "tags": ["permission-fields"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "PermissionFieldsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePermissionFieldDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PermissionFieldDto" }
+              }
+            }
+          }
+        },
+        "tags": ["permission-fields"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "PermissionFieldsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PermissionFieldDto" }
+              }
+            }
+          }
+        },
+        "tags": ["permission-fields"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/permission-conditions": {
+      "post": {
+        "operationId": "PermissionConditionsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePermissionConditionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermissionConditionDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["permission-conditions"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "PermissionConditionsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionConditionDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["permission-conditions"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/permission-conditions/{id}": {
+      "get": {
+        "operationId": "PermissionConditionsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermissionConditionDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["permission-conditions"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "PermissionConditionsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePermissionConditionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermissionConditionDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["permission-conditions"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "PermissionConditionsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PermissionConditionDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["permission-conditions"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/permission": {
+      "post": {
+        "operationId": "PermissionsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreatePermissionDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PermissionDto" }
+              }
+            }
+          }
+        },
+        "tags": ["permission"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "PermissionsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/PermissionDto" }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["permission"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/permission/{id}": {
+      "get": {
+        "operationId": "PermissionsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PermissionDto" }
+              }
+            }
+          }
+        },
+        "tags": ["permission"],
+        "security": [{ "bearer": [] }]
+      },
+      "patch": {
+        "operationId": "PermissionsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdatePermissionDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PermissionDto" }
+              }
+            }
+          }
+        },
+        "tags": ["permission"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "PermissionsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PermissionDto" }
+              }
+            }
+          }
+        },
+        "tags": ["permission"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/subjects": {
+      "get": {
+        "operationId": "SubjectsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/SubjectDto" }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["subjects"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/subjects/{id}": {
+      "get": {
+        "operationId": "SubjectsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SubjectDto" }
+              }
+            }
+          }
+        },
+        "tags": ["subjects"],
+        "security": [{ "bearer": [] }]
+      }
+    }
+  },
+  "info": {
+    "title": "ERP RBAC API",
+    "description": "",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "\n          Admin: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluIiwic3ViIjoxLCJpYXQiOjE3MDE5NTg2ODYsImV4cCI6MTczMzQ5NDY4Nn0.lM3nU7pjnCo9_FRt1--QxkY-RRUMN1vGQ5DXMAUtLww\n          Engineer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6IkVOR0lORUVSIiwic3ViIjoyLCJpYXQiOjE3MDIzMDg5NDYsImV4cCI6MTczMzg0NDk0Nn0.94YUdCvXJS9CLgy5rdHhDF_pYvJIDf_oHxeffbpg5Lk\n          Client: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6IkNMSUVOVCIsInN1YiI6MywiaWF0IjoxNzAyMzA4OTgxLCJleHAiOjE3MzM4NDQ5ODF9.LKUFAJd9X-imnDPZQByYS9V8VOU0aZgCoKEOk0_e2BI\n          HR: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6IkhSIiwic3ViIjo0LCJpYXQiOjE3MDIzMDkwMDcsImV4cCI6MTczMzg0NTAwN30.TGvNV0jONasxE4-8zHV_Cw_QQEkN3ykRDCRtMCrBvAk\n          Manager: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6Ik1BTkFHRVIiLCJzdWIiOjUsImlhdCI6MTcwMjMwOTAzNywiZXhwIjoxNzMzODQ1MDM3fQ.R2us6kp97tFKPJnSjzCDmGRLk7ZEXfF5A4P-l63cdVk\n          ",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "SignUpDto": {
+        "type": "object",
+        "properties": {
+          "login": { "type": "string" },
+          "password": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "patronymic": { "type": "string" }
+        },
+        "required": ["login", "password"]
+      },
+      "AccessDto": {
+        "type": "object",
+        "properties": { "access_token": { "type": "string" } },
+        "required": ["access_token"]
+      },
+      "SignInDto": {
+        "type": "object",
+        "properties": {
+          "login": { "type": "string" },
+          "password": { "type": "string" }
+        },
+        "required": ["login", "password"]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "login": { "type": "string" },
+          "password": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "patronymic": { "type": "string" },
+          "language": {
+            "type": "string",
+            "enum": ["en", "it", "de", "fr", "es", "tr", "nl"]
+          },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "roleIds": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["login", "password"]
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "login": { "type": "string", "uniqueItems": true },
+          "firstName": { "type": "string", "nullable": true },
+          "lastName": { "type": "string", "nullable": true },
+          "patronymic": { "type": "string", "nullable": true },
+          "language": {
+            "type": "string",
+            "enum": ["en", "it", "de", "fr", "es", "tr", "nl"]
+          },
+          "email": { "type": "string", "nullable": true },
+          "lastVisit": { "type": "boolean" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": ["id", "login", "language", "createdAt", "updatedAt"]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "login": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "patronymic": { "type": "string" },
+          "language": {
+            "type": "string",
+            "enum": ["en", "it", "de", "fr", "es", "tr", "nl"]
+          },
+          "email": { "type": "string" },
+          "phone": { "type": "string" },
+          "roleIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "RoleDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": ["id", "name", "createdAt", "updatedAt"]
+      },
+      "PermissionFieldDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "permissionId": { "type": "string" },
+          "name": { "type": "string" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": ["id", "permissionId", "name", "createdAt", "updatedAt"]
+      },
+      "PermissionConditionDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "permissionId": { "type": "string" },
+          "key": { "type": "string" },
+          "value": { "type": "string" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": [
+          "id",
+          "permissionId",
+          "key",
+          "value",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PermissionDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "subjectId": { "type": "string" },
+          "modality": { "type": "boolean" },
+          "action": {
+            "type": "string",
+            "enum": ["manage", "create", "read", "update", "delete"]
+          },
+          "fields": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PermissionFieldDto" }
+          },
+          "conditions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PermissionConditionDto" }
+          },
+          "reason": { "type": "string", "nullable": true },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "subjectId",
+          "modality",
+          "action",
+          "fields",
+          "conditions",
+          "reason",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreateRoleDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["name"]
+      },
+      "UpdateRoleDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "CreateDetailDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "partNumber": { "type": "string" }
+        },
+        "required": ["name"]
+      },
+      "DetailDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "partNumber": { "type": "string" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": ["id", "name", "partNumber", "createdAt", "updatedAt"]
+      },
+      "UpdateDetailDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "partNumber": { "type": "string" }
+        }
+      },
+      "CreateMachineDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "partNumber": { "type": "string" }
+        },
+        "required": ["name"]
+      },
+      "MachineDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "partNumber": { "type": "string" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": ["id", "name", "partNumber", "createdAt", "updatedAt"]
+      },
+      "UpdateMachineDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "partNumber": { "type": "string" }
+        }
+      },
+      "CreateParamDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "unit": { "type": "string" },
+          "type": { "type": "string" }
+        },
+        "required": ["name"]
+      },
+      "ParamDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "unit": { "type": "string" },
+          "type": { "type": "string" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": ["id", "name", "unit", "type", "createdAt", "updatedAt"]
+      },
+      "UpdateParamDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "unit": { "type": "string" },
+          "type": { "type": "string" }
+        }
+      },
+      "CreateAddressDto": {
+        "type": "object",
+        "properties": {
+          "clientId": { "type": "number" },
+          "index": { "type": "number" },
+          "city": { "type": "string" },
+          "district": { "type": "string" },
+          "street": { "type": "string" },
+          "building": { "type": "string" }
+        },
+        "required": [
+          "clientId",
+          "index",
+          "city",
+          "district",
+          "street",
+          "building"
+        ]
+      },
+      "AddressDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "clientId": { "type": "number" },
+          "index": { "type": "number" },
+          "city": { "type": "string" },
+          "district": { "type": "string" },
+          "street": { "type": "string" },
+          "building": { "type": "string" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": [
+          "id",
+          "clientId",
+          "index",
+          "city",
+          "district",
+          "street",
+          "building",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateAddressDto": {
+        "type": "object",
+        "properties": {
+          "clientId": { "type": "number" },
+          "index": { "type": "number" },
+          "city": { "type": "string" },
+          "district": { "type": "string" },
+          "street": { "type": "string" },
+          "building": { "type": "string" }
+        }
+      },
+      "CreateOrderDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "comment": { "type": "string" },
+          "statusCode": { "type": "number" },
+          "totalPrice": { "type": "number" },
+          "clientId": { "type": "number" },
+          "addressId": { "type": "number" },
+          "responsibleId": { "type": "number" }
+        },
+        "required": [
+          "name",
+          "comment",
+          "statusCode",
+          "totalPrice",
+          "clientId",
+          "addressId",
+          "responsibleId"
+        ]
+      },
+      "OrderDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "clientId": { "type": "number" },
+          "addressId": { "type": "number" },
+          "responsibleId": { "type": "number" },
+          "name": { "type": "string" },
+          "comment": { "type": "string" },
+          "statusCode": { "type": "number" },
+          "totalPrice": { "type": "number" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": [
+          "id",
+          "clientId",
+          "addressId",
+          "responsibleId",
+          "name",
+          "statusCode",
+          "totalPrice",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateOrderDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "comment": { "type": "string" },
+          "statusCode": { "type": "number" },
+          "totalPrice": { "type": "number" },
+          "clientId": { "type": "number" },
+          "addressId": { "type": "number" },
+          "responsibleId": { "type": "number" }
+        }
+      },
+      "CreatePermissionFieldDto": {
+        "type": "object",
+        "properties": {
+          "permissionId": { "type": "number" },
+          "name": { "type": "string" }
+        },
+        "required": ["permissionId", "name"]
+      },
+      "UpdatePermissionFieldDto": {
+        "type": "object",
+        "properties": {
+          "permissionId": { "type": "number" },
+          "name": { "type": "string" }
+        },
+        "required": ["permissionId", "name"]
+      },
+      "CreatePermissionConditionDto": {
+        "type": "object",
+        "properties": {
+          "permissionId": { "type": "number" },
+          "key": { "type": "string" },
+          "value": { "type": "string" }
+        },
+        "required": ["permissionId", "key", "value"]
+      },
+      "UpdatePermissionConditionDto": {
+        "type": "object",
+        "properties": {
+          "permissionId": { "type": "number" },
+          "key": { "type": "string" },
+          "value": { "type": "string" }
+        },
+        "required": ["permissionId", "key", "value"]
+      },
+      "PermissionField": {
+        "type": "object",
+        "properties": { "name": { "type": "string" } },
+        "required": ["name"]
+      },
+      "PermissionCondition": {
+        "type": "object",
+        "properties": {
+          "key": { "type": "string" },
+          "value": { "type": "string" }
+        },
+        "required": ["key", "value"]
+      },
+      "CreatePermissionDto": {
+        "type": "object",
+        "properties": {
+          "subjectId": { "type": "number" },
+          "modality": { "type": "boolean" },
+          "fields": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PermissionField" }
+          },
+          "conditions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PermissionCondition" }
+          },
+          "reason": { "type": "string" },
+          "action": {
+            "type": "string",
+            "enum": ["manage", "create", "read", "update", "delete"]
+          }
+        },
+        "required": ["subjectId", "action"]
+      },
+      "UpdatePermissionDto": {
+        "type": "object",
+        "properties": {
+          "subjectId": { "type": "number" },
+          "modality": { "type": "boolean" },
+          "action": { "type": "string" }
+        },
+        "required": ["subjectId", "modality", "action"]
+      },
+      "SubjectDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": ["id", "name", "createdAt", "updatedAt"]
+      }
+    }
+  }
+}

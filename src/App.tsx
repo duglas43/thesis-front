@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { FC } from "react";
+import { Route, Routes } from "react-router-dom";
+import { SignInPage, SignUpPage, NotFoundPage } from "./pages";
+import { useUsersControllerFindMeQuery } from "./store/users";
+import { AppLayout, AuthProtect } from "./layouts";
+import { useLanguageListener } from "@src/hooks";
 
-function App() {
+const App: FC = () => {
+  const { data } = useUsersControllerFindMeQuery();
+  useLanguageListener();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/" element={<AuthProtect />}>
+          <Route path="/" element={<AppLayout />}>
+            {data ? (
+              <></>
+            ) : (
+              <>
+                <Route path="/*" element={<NotFoundPage />} />
+              </>
+            )}
+          </Route>
+          <Route path="/*" element={<NotFoundPage />} />
+        </Route>
+        <Route path="/*" element={<NotFoundPage />} />
+      </Routes>
+    </>
   );
-}
+};
 
 export default App;
