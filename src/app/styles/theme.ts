@@ -12,5 +12,4 @@ declare module "@mui/material/styles" {
 
 export const theme = createTheme({
   drawerWidth: 240,
-  spacing: 4,
 });

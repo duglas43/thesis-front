@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Box, Drawer, Toolbar } from "@mui/material";
-import { Sidebar, CLIENT_SIDEBAR_SHEMA } from "@shared/ui";
+import { Sidebar, SIDEBAR_SHEMA } from "@shared/ui";
 import { Header } from "@widgets/Header";
 import { Outlet, useLocation } from "react-router-dom";
 import { temporaryDrawerSx, permanentDrawerSx, mainSx } from "../styles";
@@ -24,7 +24,7 @@ export const AppLayout: FC<AppLayoutProps> = () => {
             handleDrawerToggle();
           }}
           text={t(
-            CLIENT_SIDEBAR_SHEMA.find(
+            SIDEBAR_SHEMA.find(
               (item) => item.link === `/${location.pathname.split("/")[1]}`
             )?.text as any
           )}
@@ -44,11 +44,11 @@ export const AppLayout: FC<AppLayoutProps> = () => {
             sx={temporaryDrawerSx}
           >
             <Toolbar />
-            <Sidebar schema={CLIENT_SIDEBAR_SHEMA} />
+            <Sidebar schema={SIDEBAR_SHEMA} />
           </Drawer>
           <Drawer variant="permanent" sx={permanentDrawerSx} open>
             <Toolbar />
-            <Sidebar schema={CLIENT_SIDEBAR_SHEMA} />
+            <Sidebar schema={SIDEBAR_SHEMA} />
           </Drawer>
         </Box>
         <Box component="main" sx={mainSx}>

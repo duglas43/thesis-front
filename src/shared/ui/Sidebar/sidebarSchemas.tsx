@@ -1,9 +1,12 @@
-import ArticleIcon from "@mui/icons-material/Article";
 import ChatIcon from "@mui/icons-material/Chat";
-import CloudIcon from "@mui/icons-material/Cloud";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import GroupIcon from "@mui/icons-material/Group";
-import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import BadgeIcon from "@mui/icons-material/Badge";
+import { Box } from "@mui/material";
+import LockIcon from "@mui/icons-material/Lock";
+import SettingsIcon from "@mui/icons-material/Settings";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import { IconGroup } from "../IconGroup";
 
 export interface SidebarSchema {
   text: string;
@@ -11,71 +14,56 @@ export interface SidebarSchema {
   icon: JSX.Element;
 }
 
-export const ADMIN_SIDEBAR_SCHEMA: SidebarSchema[] = [
-  {
-    text: "Applications",
-    link: "/",
-    icon: <ArticleIcon />,
-  },
-  {
-    text: "Files",
-    link: "/files",
-    icon: <CloudIcon />,
-  },
-  {
-    text: "Chat",
-    link: "/chat",
-    icon: <ChatIcon />,
-  },
+export const SIDEBAR_SHEMA: SidebarSchema[] = [
   {
     text: "Users",
-    link: "/users",
-    icon: <GroupIcon />,
-  },
-  {
-    text: "Scripts",
-    link: "/scripts",
-    icon: <TextSnippetIcon />,
-  },
-  {
-    text: "Profile",
-    link: "/profile",
-    icon: <AccountCircleIcon />,
-  },
-];
-export const ENGINEER_SIDEBAR_SCHEMA: SidebarSchema[] = [
-  {
-    text: "Applications",
     link: "/",
-    icon: <ArticleIcon />,
+    icon: <PeopleAltIcon />,
   },
   {
-    text: "Files",
-    link: "/files",
-    icon: <CloudIcon />,
+    text: "Users Roles",
+    link: "/users-roles",
+    icon: (
+      <IconGroup>
+        <PeopleAltIcon />
+        <BadgeIcon />
+      </IconGroup>
+    ),
   },
   {
-    text: "Chat",
-    link: "/chat",
-    icon: <ChatIcon />,
+    text: "Users Permissions",
+    link: "/users-permissions",
+    icon: (
+      <IconGroup>
+        <PeopleAltIcon />
+        <LockIcon />
+      </IconGroup>
+    ),
   },
   {
-    text: "Profile",
-    link: "/profile",
-    icon: <AccountCircleIcon />,
-  },
-];
-
-export const CLIENT_SIDEBAR_SHEMA: SidebarSchema[] = [
-  {
-    text: "Applications",
-    link: "/",
-    icon: <ArticleIcon />,
+    text: "Roles",
+    link: "/roles",
+    icon: <BadgeIcon />,
   },
   {
-    text: "Chat",
-    link: "/chat",
-    icon: <ChatIcon />,
+    text: "Roles Permissions",
+    link: "/roles-permissions",
+    icon: (
+      <IconGroup>
+        <BadgeIcon />
+        <LockIcon />
+      </IconGroup>
+    ),
+  },
+  {
+    text: "Machines",
+    link: "/machines",
+    icon: <PrecisionManufacturingIcon />,
+  },
+  {
+    text: "Details",
+    link: "/details",
+    icon: <SettingsIcon />,
   },
   {
     text: "Profile",

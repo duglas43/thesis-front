@@ -12,7 +12,7 @@ export const UsersPage = () => {
   return (
     <Box sx={pageContainerSx}>
       <Box sx={pageItemSx}>
-        <Box sx={containerSx}>
+        <Box sx={{ ...containerSx, height: "100%" }}>
           <Box sx={tableContainerSx}>
             <UsersTable />
           </Box>

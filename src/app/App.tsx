@@ -5,10 +5,11 @@ import { useUsersControllerFindMeQuery } from "@entities/users";
 import { usePagesControllerFindAllQuery } from "@shared/api";
 import { AppLayout } from "@widgets/AppLayout";
 import { AuthProtect } from "@widgets/AuthProtectLayout";
-import { NotFoundPage } from "@pages/NotFoundPage";
-import { SignInPage } from "@pages/SignInPage";
-import { SignUpPage } from "@pages/SignUpPage";
-import { UsersPage } from "@pages/UsersPage";
+import { NotFoundPage } from "@src/pages/NotFound";
+import { SignInPage } from "@src/pages/SignIn";
+import { SignUpPage } from "@src/pages/SignUp";
+import { UsersPage } from "@src/pages/Users";
+import { RolesPage } from "@src/pages/Roles";
 
 const App: FC = () => {
   const { data } = useUsersControllerFindMeQuery();
@@ -23,6 +24,8 @@ const App: FC = () => {
         <Route path="/" element={<AuthProtect />}>
           <Route path="/" element={<AppLayout />}>
             <Route path="/" element={<UsersPage />} />
+            <Route path="/users" element={<UsersPage />} />
+            <Route path="/roles" element={<RolesPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Route>
           <Route path="/*" element={<NotFoundPage />} />

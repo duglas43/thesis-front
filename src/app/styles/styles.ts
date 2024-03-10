@@ -28,7 +28,6 @@ export const containerSx = {
   borderRadius: 2,
   backgroundColor: "white",
   overflow: "hidden",
-  height: "100%",
 };
 export const tableContainerSx: SxProps<Theme> = (theme: any) => ({
   height: "100%",

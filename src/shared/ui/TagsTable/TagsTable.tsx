@@ -7,6 +7,7 @@ import { ORDERS } from "@shared/types";
 import { LibSearchProps } from "@shared/ui";
 import { SxProps } from "@mui/material";
 import { TagsTableListProps } from "./List/List";
+import { BoxProps, Box } from "@mui/material";
 
 export interface Tag {
   id: string;
@@ -27,7 +28,7 @@ export enum TAGS_TABLE_FILTER_TYPES {
   ORDER = "order",
   INCLUDE_MODE = "includeMode",
 }
-export interface TagsTableProps {
+export interface TagsTableProps extends BoxProps {
   tags: Extendable<Tag>[];
   selectedIds: number[];
   tagListSx?: SxProps;
@@ -66,6 +67,7 @@ const TagsTable: FC<TagsTableProps> = ({
   hideToolbar,
   searchProps,
   listProps,
+  ...props
 }) => {
   const handleTagClick = (id: number, tag: Extendable<Tag>) => {
     onTagSelectionChange([id], [tag]);
@@ -74,7 +76,7 @@ const TagsTable: FC<TagsTableProps> = ({
     tags.filter((tag) => selectedIds.includes(tag.id)) &&
     selectedIds.length > 0;
   return (
-    <>
+    <Box {...props}>
       <TagsTableSearchBar
         searchProps={searchProps}
         searchText={searchText}
@@ -103,7 +105,7 @@ const TagsTable: FC<TagsTableProps> = ({
         pageCount={pageCount}
         onRowsPerPageChange={onRowsPerPageChange}
       />
-    </>
+    </Box>
   );
 };
 

@@ -39,5 +39,9 @@
       "add": "Add",
       "delete": "Delete"
     }
-  }
+  },
+  "description": "Description",
+  "name": "Name",
+  "save": "Save",
+  "nameIsRequired": "Name is required field"
 }
