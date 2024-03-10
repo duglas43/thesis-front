@@ -1,1 +1,2 @@
-export { SignUpWidget } from "./SignUpWidget";
+export { SignUpWidget } from "./ui/SignUpWidget";
+export * from "./styles";

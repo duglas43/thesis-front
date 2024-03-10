@@ -5,8 +5,8 @@ import {
   containerSx,
   pageItemSx,
   tableContainerSx,
-} from "@src/styles/styles";
-import { UsersTable } from "@src/components/UsersTable";
+} from "@src/app/styles";
+import { UsersTable } from "@entities/users";
 
 export const UsersPage = () => {
   return (

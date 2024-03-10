@@ -1,14 +1,14 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
-import "./styles/index.css";
-import "./i18n";
-import App from "./App";
+import "./app/styles/index.css";
+import "@shared/i18n";
+import App from "./app/App";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { SnackbarProvider } from "notistack";
-import { store } from "./store";
+import { store } from "./app/store";
 import { ThemeProvider } from "@mui/material";
-import { theme } from "./styles/theme";
+import { theme } from "./app/styles";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

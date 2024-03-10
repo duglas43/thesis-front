@@ -3,7 +3,11 @@ module.exports = {
   webpack: {
     alias: {
       "@src": path.resolve(__dirname, "src/"),
-      "@types": path.resolve(__dirname, "src/@types/"),
+      "@app": path.resolve(__dirname, "src/app/"),
+      "@pages": path.resolve(__dirname, "src/pages/"),
+      "@widgets": path.resolve(__dirname, "src/widgets/"),
+      "@entities": path.resolve(__dirname, "src/entities/"),
+      "@shared": path.resolve(__dirname, "src/shared/"),
     },
   },
 };

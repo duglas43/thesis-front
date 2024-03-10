@@ -18,7 +18,11 @@
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "paths": {
       "@src/*": ["./src/*"],
-      "@types/*": ["./src/@types/*"]
+      "@app/*": ["./src/app/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@widgets/*": ["./src/widgets/*"],
+      "@entities/*": ["./src/entities/*"],
+      "@shared/*": ["./src/shared/*"]
     }
   },
   "include": ["src", "src/hooks/socketInit.ts"]
