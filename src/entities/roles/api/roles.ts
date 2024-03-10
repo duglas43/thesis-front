@@ -43,7 +43,28 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/roles`,
-        params: { query: queryArg.query },
+        params: {
+          query: queryArg.query,
+          sort: queryArg.sort,
+          order: queryArg.order,
+          limit: queryArg.limit,
+          page: queryArg.page,
+        },
+      }),
+    }),
+    rolesControllerFindAllPaginated: build.query<
+      RolesControllerFindAllPaginatedApiResponse,
+      RolesControllerFindAllPaginatedApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/roles/paginated`,
+        params: {
+          query: queryArg.query,
+          sort: queryArg.sort,
+          order: queryArg.order,
+          limit: queryArg.limit,
+          page: queryArg.page,
+        },
       }),
     }),
     rolesControllerFindOne: build.query<
@@ -123,6 +144,21 @@ export type RolesControllerCreateApiArg = {
 export type RolesControllerFindAllApiResponse = /** status 200  */ RoleDto[];
 export type RolesControllerFindAllApiArg = {
   query: string;
+  sort?: string;
+  order?: ORDER;
+  limit?: number;
+  page?: number;
+};
+export type RolesControllerFindAllPaginatedApiResponse = /** status 200  */ {
+  content?: RoleDto[];
+  meta?: MetaDto;
+};
+export type RolesControllerFindAllPaginatedApiArg = {
+  query: string;
+  sort?: string;
+  order?: ORDER;
+  limit?: number;
+  page?: number;
 };
 export type RolesControllerFindOneApiResponse = /** status 200  */ RoleDto;
 export type RolesControllerFindOneApiArg = {
@@ -179,6 +215,15 @@ export type CreateRoleDto = {
   name: string;
   description?: string;
 };
+export type MetaDto = {
+  totalCount: number;
+  pageCount: number;
+  resultCount: number;
+  page: number;
+  limit: number;
+  order: ORDER;
+  sort: string;
+};
 export type UpdateRoleDto = {
   name?: string;
   description?: string;
@@ -218,6 +263,10 @@ export enum LANGUAGES {
   Tr = "tr",
   Nl = "nl",
 }
+export enum ORDER {
+  Asc = "ASC",
+  Desc = "DESC",
+}
 export enum ACTIONS {
   Manage = "manage",
   Create = "create",
@@ -233,6 +282,8 @@ export const {
   useRolesControllerCreateMutation,
   useRolesControllerFindAllQuery,
   useLazyRolesControllerFindAllQuery,
+  useRolesControllerFindAllPaginatedQuery,
+  useLazyRolesControllerFindAllPaginatedQuery,
   useRolesControllerFindOneQuery,
   useLazyRolesControllerFindOneQuery,
   useRolesControllerUpdateMutation,

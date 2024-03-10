@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+import { red, blue } from "@mui/material/colors";
 
 declare module "@mui/material/styles" {
   interface Theme {
@@ -11,4 +12,5 @@ declare module "@mui/material/styles" {
 
 export const theme = createTheme({
   drawerWidth: 240,
+  spacing: 4,
 });

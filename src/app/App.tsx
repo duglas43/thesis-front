@@ -22,7 +22,7 @@ const App: FC = () => {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/" element={<AuthProtect />}>
           <Route path="/" element={<AppLayout />}>
-            <Route path="/users" element={<UsersPage />} />
+            <Route path="/" element={<UsersPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Route>
           <Route path="/*" element={<NotFoundPage />} />

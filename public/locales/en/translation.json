@@ -29,5 +29,15 @@
   "createAccount": "Create an account",
   "pleaseEnterYourUserInformation": "Please enter user information",
   "alreadyHaveAnAccountSignIn": "Already have an account? Sign in",
-  "dontHaveAnAccountSignUp": "Dont have an account? Sign up"
+  "dontHaveAnAccountSignUp": "Dont have an account? Sign up",
+  "ui": {
+    "search": "Search",
+    "totalCount": "Total Count"
+  },
+  "global": {
+    "buttons": {
+      "add": "Add",
+      "delete": "Delete"
+    }
+  }
 }

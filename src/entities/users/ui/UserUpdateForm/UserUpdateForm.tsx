@@ -173,63 +173,6 @@ export const UserUpdateForm: FC<UserUpdateFormProps> = ({
         }
       />
 
-      {/* <TextField
-        fullWidth
-        id="roleId"
-        label={t("role")}
-        select
-        size="small"
-        {...formik.getFieldProps("roleId")}
-        error={formik.touched.roleId && !!formik.errors.roleId}
-        helperText={
-          formik.touched.roleId && formik.errors.roleId && formik.errors.roleId
-        }
-      >
-        {getNumericEnumValues(ROLES_IDS).map((role) => (
-          <MenuItem key={role} value={role}>
-            {t(`roles.${ROLES_IDS[role]}` as any)}
-          </MenuItem>
-        ))}
-      </TextField> */}
-
-      {/* <FormControlLabel
-        control={
-          <Switch
-            checked={changePassword}
-            onChange={() => {
-              setChangePassword(!changePassword);
-              formik.setFieldValue("password", undefined);
-            }}
-          />
-        }
-        label={t("changePassword")}
-      />
-
-      {changePassword && (
-        <>
-          <TextField
-            fullWidth
-            id="password"
-            label={t("password")}
-            type="password"
-            size="small"
-            {...formik.getFieldProps("password")}
-            error={!!formik.errors.password}
-            helperText={formik.errors.password && formik.errors.password}
-          />
-          <TextField
-            fullWidth
-            id="confirm"
-            label={t("confirm")}
-            type="password"
-            size="small"
-            {...formik.getFieldProps("confirm")}
-            error={!!formik.errors.confirm}
-            helperText={formik.errors.confirm && formik.errors.confirm}
-          />
-        </>
-      )} */}
-
       <Button fullWidth type="submit" variant="contained">
         Submit
       </Button>

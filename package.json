@@ -7,6 +7,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.0",
+    "@mui/lab": "^5.0.0-alpha.167",
     "@mui/material": "^5.15.0",
     "@mui/x-data-grid": "^6.19.5",
     "@reduxjs/toolkit": "^2.0.1",
@@ -30,6 +31,7 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.5",
     "react-redux": "^9.0.4",
+    "react-rnd": "^10.4.1",
     "react-router-dom": "^6.21.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
@@ -60,5 +62,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash.debounce": "^4.0.9"
   }
 }

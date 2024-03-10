@@ -5,3 +5,5 @@ export const getNumericEnumValues = (enumObj: any): number[] => {
 export const getNumericEnumKeys = (enumObject: Record<string, number>) => {
   return Object.keys(enumObject).filter((key) => isNaN(Number(key)));
 };
+export * from "./orders.enum";
+export * from "./table";
