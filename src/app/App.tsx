@@ -10,6 +10,8 @@ import { SignInPage } from "@src/pages/SignIn";
 import { SignUpPage } from "@src/pages/SignUp";
 import { UsersPage } from "@src/pages/Users";
 import { RolesPage } from "@src/pages/Roles";
+import { MachinesPage } from "@src/pages/Machines";
+import { DetailsPage } from "@src/pages/Details";
 
 const App: FC = () => {
   const { data } = useUsersControllerFindMeQuery();
@@ -26,6 +28,8 @@ const App: FC = () => {
             <Route path="/" element={<UsersPage />} />
             <Route path="/users" element={<UsersPage />} />
             <Route path="/roles" element={<RolesPage />} />
+            <Route path="/machines" element={<MachinesPage />} />
+            <Route path="/details" element={<DetailsPage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Route>
           <Route path="/*" element={<NotFoundPage />} />

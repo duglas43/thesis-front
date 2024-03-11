@@ -17,7 +17,13 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/machines`,
-        params: { query: queryArg.query },
+        params: {
+          query: queryArg.query,
+          sort: queryArg.sort,
+          order: queryArg.order,
+          limit: queryArg.limit,
+          page: queryArg.page,
+        },
       }),
     }),
     machinesControllerFindOne: build.query<
@@ -53,10 +59,16 @@ export type MachinesControllerCreateApiResponse = /** status 201  */ MachineDto;
 export type MachinesControllerCreateApiArg = {
   createMachineDto: CreateMachineDto;
 };
-export type MachinesControllerFindAllApiResponse =
-  /** status 200  */ MachineDto[];
+export type MachinesControllerFindAllApiResponse = /** status 200  */ {
+  content?: MachineDto[];
+  meta?: MetaDto;
+};
 export type MachinesControllerFindAllApiArg = {
   query: string;
+  sort?: string;
+  order?: ORDER;
+  limit?: number;
+  page?: number;
 };
 export type MachinesControllerFindOneApiResponse =
   /** status 200  */ MachineDto;
@@ -83,10 +95,23 @@ export type CreateMachineDto = {
   name: string;
   partNumber?: string;
 };
+export type MetaDto = {
+  totalCount: number;
+  pageCount: number;
+  resultCount: number;
+  page: number;
+  limit: number;
+  order: ORDER;
+  sort: string;
+};
 export type UpdateMachineDto = {
   name?: string;
   partNumber?: string;
 };
+export enum ORDER {
+  Asc = "ASC",
+  Desc = "DESC",
+}
 export const {
   useMachinesControllerCreateMutation,
   useMachinesControllerFindAllQuery,

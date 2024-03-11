@@ -17,7 +17,13 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/details`,
-        params: { query: queryArg.query },
+        params: {
+          query: queryArg.query,
+          sort: queryArg.sort,
+          order: queryArg.order,
+          limit: queryArg.limit,
+          page: queryArg.page,
+        },
       }),
     }),
     detailsControllerFindOne: build.query<
@@ -72,10 +78,16 @@ export type DetailsControllerCreateApiResponse = /** status 201  */ DetailDto;
 export type DetailsControllerCreateApiArg = {
   createDetailDto: CreateDetailDto;
 };
-export type DetailsControllerFindAllApiResponse =
-  /** status 200  */ DetailDto[];
+export type DetailsControllerFindAllApiResponse = /** status 200  */ {
+  content?: DetailDto[];
+  meta?: MetaDto;
+};
 export type DetailsControllerFindAllApiArg = {
   query: string;
+  sort?: string;
+  order?: ORDER;
+  limit?: number;
+  page?: number;
 };
 export type DetailsControllerFindOneApiResponse = /** status 200  */ DetailDto;
 export type DetailsControllerFindOneApiArg = {
@@ -114,10 +126,23 @@ export type CreateDetailDto = {
   name: string;
   partNumber?: string;
 };
+export type MetaDto = {
+  totalCount: number;
+  pageCount: number;
+  resultCount: number;
+  page: number;
+  limit: number;
+  order: ORDER;
+  sort: string;
+};
 export type UpdateDetailDto = {
   name?: string;
   partNumber?: string;
 };
+export enum ORDER {
+  Asc = "ASC",
+  Desc = "DESC",
+}
 export const {
   useDetailsControllerCreateMutation,
   useDetailsControllerFindAllQuery,

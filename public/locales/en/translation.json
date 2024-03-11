@@ -43,5 +43,6 @@
   "description": "Description",
   "name": "Name",
   "save": "Save",
-  "nameIsRequired": "Name is required field"
+  "nameIsRequired": "Name is required field",
+  "partNumber": "Part number"
 }

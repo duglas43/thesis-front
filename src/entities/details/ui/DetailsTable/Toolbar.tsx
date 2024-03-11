@@ -10,10 +10,10 @@ import { Box, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useTranslation } from "react-i18next";
 
-export interface UsersTableToolbarProps {
+export interface DetailsTableToolbarProps {
   onAddRecord: () => void;
 }
-export const UsersTableToolbar: FC<UsersTableToolbarProps> = React.memo(
+export const DetailsTableToolbar: FC<DetailsTableToolbarProps> = React.memo(
   ({ onAddRecord }) => {
     const { t } = useTranslation();
     return (
