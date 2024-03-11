@@ -1,21 +1,12 @@
 import React from "react";
 import { Box } from "@mui/material";
-import {
-  pageContainerSx,
-  containerSx,
-  pageItemSx,
-  tableContainerSx,
-} from "@src/app/styles";
-import { DetailsTable } from "@entities/details";
+import { pageContainerSx } from "@src/app/styles";
+import { DetailsEditWidget } from "@src/widgets/DetailsEditWidget";
 
 export const DetailsPage = () => {
   return (
     <Box sx={pageContainerSx}>
-      <Box sx={pageItemSx}>
-        <Box sx={{ ...containerSx, height: "100%" }}>
-          <Box sx={tableContainerSx}>{<DetailsTable />}</Box>
-        </Box>
-      </Box>
+      <DetailsEditWidget />
     </Box>
   );
 };
