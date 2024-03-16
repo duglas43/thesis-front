@@ -5,11 +5,13 @@ import { TAG_CONTAINER_SX } from "@app/styles";
 import { tagsTableListContainerSx, progressSx } from "./styles";
 import { SxProps } from "@mui/material";
 import { Tag } from "../";
+import { useDoubleClick } from "@src/shared/hooks";
 
 export interface TagsTableListProps {
   tags: Extendable<Tag>[];
   selectedIds?: number[];
   onTagClick: (id: number, tag: Extendable<Tag>) => void;
+  onDoubleClick?: (id: number, tag: Extendable<Tag>) => void;
   loading: boolean;
   sx?: SxProps;
 }
@@ -17,6 +19,7 @@ const TagsTableList: FC<TagsTableListProps> = ({
   tags,
   selectedIds,
   onTagClick,
+  onDoubleClick,
   loading,
   sx,
 }) => {
@@ -41,6 +44,11 @@ const TagsTableList: FC<TagsTableListProps> = ({
           writable={false}
           onClick={() => {
             onTagClick(tag.id, tag);
+          }}
+          onDoubleClick={() => {
+            if (loading) return;
+            if (!onDoubleClick) return;
+            onDoubleClick(tag.id, tag);
           }}
         />
       ))}

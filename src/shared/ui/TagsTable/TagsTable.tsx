@@ -45,6 +45,8 @@ export interface TagsTableProps extends BoxProps {
   pageCount: number;
   rowsPerPage: number;
   hideToolbar?: boolean;
+  hideSearchBar?: boolean;
+  hideFooter?: boolean;
   searchProps?: LibSearchProps;
   listProps?: Partial<TagsTableListProps>;
 }
@@ -65,6 +67,8 @@ const TagsTable: FC<TagsTableProps> = ({
   rowsPerPage,
   tagListSx,
   hideToolbar,
+  hideSearchBar,
+  hideFooter,
   searchProps,
   listProps,
   ...props
@@ -77,11 +81,13 @@ const TagsTable: FC<TagsTableProps> = ({
     selectedIds.length > 0;
   return (
     <Box {...props}>
-      <TagsTableSearchBar
-        searchProps={searchProps}
-        searchText={searchText}
-        onSearchTextChange={onSearchTextChange}
-      />
+      {hideSearchBar || (
+        <TagsTableSearchBar
+          searchProps={searchProps}
+          searchText={searchText}
+          onSearchTextChange={onSearchTextChange}
+        />
+      )}
       {hideToolbar || (
         <TagsTableToolbar
           onAddButtonClick={onAddItem}
@@ -97,14 +103,16 @@ const TagsTable: FC<TagsTableProps> = ({
         sx={tagListSx}
         {...listProps}
       />
-      <TagsTableFooter
-        totalCount={totalCount}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        onPageChange={onPageChange}
-        pageCount={pageCount}
-        onRowsPerPageChange={onRowsPerPageChange}
-      />
+      {hideFooter || (
+        <TagsTableFooter
+          totalCount={totalCount}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={onPageChange}
+          pageCount={pageCount}
+          onRowsPerPageChange={onRowsPerPageChange}
+        />
+      )}
     </Box>
   );
 };
