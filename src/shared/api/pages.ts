@@ -1,50 +1,63 @@
 import { emptySplitApi as api } from "./emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    pagesControllerCreate: build.mutation<
-      PagesControllerCreateApiResponse,
-      PagesControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/pages`,
-        method: "POST",
-        body: queryArg.createPageDto,
+export const addTagTypes = ["pages"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      pagesControllerCreate: build.mutation<
+        PagesControllerCreateApiResponse,
+        PagesControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pages`,
+          method: "POST",
+          body: queryArg.createPageDto,
+        }),
+        invalidatesTags: ["pages"],
+      }),
+      pagesControllerFindAll: build.query<
+        PagesControllerFindAllApiResponse,
+        PagesControllerFindAllApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pages`,
+          params: { query: queryArg.query },
+        }),
+        providesTags: ["pages"],
+      }),
+      pagesControllerFindOne: build.query<
+        PagesControllerFindOneApiResponse,
+        PagesControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/pages/${queryArg.id}` }),
+        providesTags: ["pages"],
+      }),
+      pagesControllerUpdate: build.mutation<
+        PagesControllerUpdateApiResponse,
+        PagesControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pages/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updatePageDto,
+        }),
+        invalidatesTags: ["pages"],
+      }),
+      pagesControllerRemove: build.mutation<
+        PagesControllerRemoveApiResponse,
+        PagesControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/pages/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["pages"],
       }),
     }),
-    pagesControllerFindAll: build.query<
-      PagesControllerFindAllApiResponse,
-      PagesControllerFindAllApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/pages`,
-        params: { query: queryArg.query },
-      }),
-    }),
-    pagesControllerFindOne: build.query<
-      PagesControllerFindOneApiResponse,
-      PagesControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/pages/${queryArg.id}` }),
-    }),
-    pagesControllerUpdate: build.mutation<
-      PagesControllerUpdateApiResponse,
-      PagesControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/pages/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updatePageDto,
-      }),
-    }),
-    pagesControllerRemove: build.mutation<
-      PagesControllerRemoveApiResponse,
-      PagesControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({ url: `/pages/${queryArg.id}`, method: "DELETE" }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as pagesApi };
 export type PagesControllerCreateApiResponse = /** status 201  */ PageDto;
 export type PagesControllerCreateApiArg = {

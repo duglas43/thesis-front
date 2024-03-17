@@ -1,184 +1,216 @@
 import { emptySplitApi as api } from "../../../shared/api/emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    usersControllerFindPermissions: build.query<
-      UsersControllerFindPermissionsApiResponse,
-      UsersControllerFindPermissionsApiArg
-    >({
-      query: (queryArg) => ({ url: `/users/${queryArg.id}/permissions` }),
-    }),
-    usersControllerAddPermissions: build.mutation<
-      UsersControllerAddPermissionsApiResponse,
-      UsersControllerAddPermissionsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users/${queryArg.id}/permissions`,
-        method: "POST",
-        body: queryArg.body,
+export const addTagTypes = [
+  "users",
+  "roles",
+  "permission-fields",
+  "permission-conditions",
+  "permission",
+] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      usersControllerFindPermissions: build.query<
+        UsersControllerFindPermissionsApiResponse,
+        UsersControllerFindPermissionsApiArg
+      >({
+        query: (queryArg) => ({ url: `/users/${queryArg.id}/permissions` }),
+        providesTags: ["users"],
+      }),
+      usersControllerAddPermissions: build.mutation<
+        UsersControllerAddPermissionsApiResponse,
+        UsersControllerAddPermissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}/permissions`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["users"],
+      }),
+      usersControllerRemovePermissions: build.mutation<
+        UsersControllerRemovePermissionsApiResponse,
+        UsersControllerRemovePermissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}/permissions`,
+          method: "DELETE",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["users"],
+      }),
+      rolesControllerFindPermissions: build.query<
+        RolesControllerFindPermissionsApiResponse,
+        RolesControllerFindPermissionsApiArg
+      >({
+        query: (queryArg) => ({ url: `/roles/${queryArg.id}/permissions` }),
+        providesTags: ["roles"],
+      }),
+      rolesControllerAddPermissions: build.mutation<
+        RolesControllerAddPermissionsApiResponse,
+        RolesControllerAddPermissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/roles/${queryArg.id}/permissions`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["roles"],
+      }),
+      rolesControllerRemovePermissions: build.mutation<
+        RolesControllerRemovePermissionsApiResponse,
+        RolesControllerRemovePermissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/roles/${queryArg.id}/permissions`,
+          method: "DELETE",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["roles"],
+      }),
+      permissionFieldsControllerCreate: build.mutation<
+        PermissionFieldsControllerCreateApiResponse,
+        PermissionFieldsControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/permission-fields`,
+          method: "POST",
+          body: queryArg.createPermissionFieldDto,
+        }),
+        invalidatesTags: ["permission-fields"],
+      }),
+      permissionFieldsControllerFindAll: build.query<
+        PermissionFieldsControllerFindAllApiResponse,
+        PermissionFieldsControllerFindAllApiArg
+      >({
+        query: () => ({ url: `/permission-fields` }),
+        providesTags: ["permission-fields"],
+      }),
+      permissionFieldsControllerFindOne: build.query<
+        PermissionFieldsControllerFindOneApiResponse,
+        PermissionFieldsControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/permission-fields/${queryArg.id}` }),
+        providesTags: ["permission-fields"],
+      }),
+      permissionFieldsControllerUpdate: build.mutation<
+        PermissionFieldsControllerUpdateApiResponse,
+        PermissionFieldsControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/permission-fields/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updatePermissionFieldDto,
+        }),
+        invalidatesTags: ["permission-fields"],
+      }),
+      permissionFieldsControllerRemove: build.mutation<
+        PermissionFieldsControllerRemoveApiResponse,
+        PermissionFieldsControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/permission-fields/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["permission-fields"],
+      }),
+      permissionConditionsControllerCreate: build.mutation<
+        PermissionConditionsControllerCreateApiResponse,
+        PermissionConditionsControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/permission-conditions`,
+          method: "POST",
+          body: queryArg.createPermissionConditionDto,
+        }),
+        invalidatesTags: ["permission-conditions"],
+      }),
+      permissionConditionsControllerFindAll: build.query<
+        PermissionConditionsControllerFindAllApiResponse,
+        PermissionConditionsControllerFindAllApiArg
+      >({
+        query: () => ({ url: `/permission-conditions` }),
+        providesTags: ["permission-conditions"],
+      }),
+      permissionConditionsControllerFindOne: build.query<
+        PermissionConditionsControllerFindOneApiResponse,
+        PermissionConditionsControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/permission-conditions/${queryArg.id}` }),
+        providesTags: ["permission-conditions"],
+      }),
+      permissionConditionsControllerUpdate: build.mutation<
+        PermissionConditionsControllerUpdateApiResponse,
+        PermissionConditionsControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/permission-conditions/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updatePermissionConditionDto,
+        }),
+        invalidatesTags: ["permission-conditions"],
+      }),
+      permissionConditionsControllerRemove: build.mutation<
+        PermissionConditionsControllerRemoveApiResponse,
+        PermissionConditionsControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/permission-conditions/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["permission-conditions"],
+      }),
+      permissionsControllerCreate: build.mutation<
+        PermissionsControllerCreateApiResponse,
+        PermissionsControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/permission`,
+          method: "POST",
+          body: queryArg.createPermissionDto,
+        }),
+        invalidatesTags: ["permission"],
+      }),
+      permissionsControllerFindAll: build.query<
+        PermissionsControllerFindAllApiResponse,
+        PermissionsControllerFindAllApiArg
+      >({
+        query: () => ({ url: `/permission` }),
+        providesTags: ["permission"],
+      }),
+      permissionsControllerFindOne: build.query<
+        PermissionsControllerFindOneApiResponse,
+        PermissionsControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/permission/${queryArg.id}` }),
+        providesTags: ["permission"],
+      }),
+      permissionsControllerUpdate: build.mutation<
+        PermissionsControllerUpdateApiResponse,
+        PermissionsControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/permission/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updatePermissionDto,
+        }),
+        invalidatesTags: ["permission"],
+      }),
+      permissionsControllerRemove: build.mutation<
+        PermissionsControllerRemoveApiResponse,
+        PermissionsControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/permission/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["permission"],
       }),
     }),
-    usersControllerRemovePermissions: build.mutation<
-      UsersControllerRemovePermissionsApiResponse,
-      UsersControllerRemovePermissionsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users/${queryArg.id}/permissions`,
-        method: "DELETE",
-        body: queryArg.body,
-      }),
-    }),
-    rolesControllerFindPermissions: build.query<
-      RolesControllerFindPermissionsApiResponse,
-      RolesControllerFindPermissionsApiArg
-    >({
-      query: (queryArg) => ({ url: `/roles/${queryArg.id}/permissions` }),
-    }),
-    rolesControllerAddPermissions: build.mutation<
-      RolesControllerAddPermissionsApiResponse,
-      RolesControllerAddPermissionsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/roles/${queryArg.id}/permissions`,
-        method: "POST",
-        body: queryArg.body,
-      }),
-    }),
-    rolesControllerRemovePermissions: build.mutation<
-      RolesControllerRemovePermissionsApiResponse,
-      RolesControllerRemovePermissionsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/roles/${queryArg.id}/permissions`,
-        method: "DELETE",
-        body: queryArg.body,
-      }),
-    }),
-    permissionFieldsControllerCreate: build.mutation<
-      PermissionFieldsControllerCreateApiResponse,
-      PermissionFieldsControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/permission-fields`,
-        method: "POST",
-        body: queryArg.createPermissionFieldDto,
-      }),
-    }),
-    permissionFieldsControllerFindAll: build.query<
-      PermissionFieldsControllerFindAllApiResponse,
-      PermissionFieldsControllerFindAllApiArg
-    >({
-      query: () => ({ url: `/permission-fields` }),
-    }),
-    permissionFieldsControllerFindOne: build.query<
-      PermissionFieldsControllerFindOneApiResponse,
-      PermissionFieldsControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/permission-fields/${queryArg.id}` }),
-    }),
-    permissionFieldsControllerUpdate: build.mutation<
-      PermissionFieldsControllerUpdateApiResponse,
-      PermissionFieldsControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/permission-fields/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updatePermissionFieldDto,
-      }),
-    }),
-    permissionFieldsControllerRemove: build.mutation<
-      PermissionFieldsControllerRemoveApiResponse,
-      PermissionFieldsControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/permission-fields/${queryArg.id}`,
-        method: "DELETE",
-      }),
-    }),
-    permissionConditionsControllerCreate: build.mutation<
-      PermissionConditionsControllerCreateApiResponse,
-      PermissionConditionsControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/permission-conditions`,
-        method: "POST",
-        body: queryArg.createPermissionConditionDto,
-      }),
-    }),
-    permissionConditionsControllerFindAll: build.query<
-      PermissionConditionsControllerFindAllApiResponse,
-      PermissionConditionsControllerFindAllApiArg
-    >({
-      query: () => ({ url: `/permission-conditions` }),
-    }),
-    permissionConditionsControllerFindOne: build.query<
-      PermissionConditionsControllerFindOneApiResponse,
-      PermissionConditionsControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/permission-conditions/${queryArg.id}` }),
-    }),
-    permissionConditionsControllerUpdate: build.mutation<
-      PermissionConditionsControllerUpdateApiResponse,
-      PermissionConditionsControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/permission-conditions/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updatePermissionConditionDto,
-      }),
-    }),
-    permissionConditionsControllerRemove: build.mutation<
-      PermissionConditionsControllerRemoveApiResponse,
-      PermissionConditionsControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/permission-conditions/${queryArg.id}`,
-        method: "DELETE",
-      }),
-    }),
-    permissionsControllerCreate: build.mutation<
-      PermissionsControllerCreateApiResponse,
-      PermissionsControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/permission`,
-        method: "POST",
-        body: queryArg.createPermissionDto,
-      }),
-    }),
-    permissionsControllerFindAll: build.query<
-      PermissionsControllerFindAllApiResponse,
-      PermissionsControllerFindAllApiArg
-    >({
-      query: () => ({ url: `/permission` }),
-    }),
-    permissionsControllerFindOne: build.query<
-      PermissionsControllerFindOneApiResponse,
-      PermissionsControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/permission/${queryArg.id}` }),
-    }),
-    permissionsControllerUpdate: build.mutation<
-      PermissionsControllerUpdateApiResponse,
-      PermissionsControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/permission/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updatePermissionDto,
-      }),
-    }),
-    permissionsControllerRemove: build.mutation<
-      PermissionsControllerRemoveApiResponse,
-      PermissionsControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/permission/${queryArg.id}`,
-        method: "DELETE",
-      }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as permissionApi };
 export type UsersControllerFindPermissionsApiResponse =
   /** status 200  */ PermissionDto[];

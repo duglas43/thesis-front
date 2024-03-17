@@ -1,78 +1,90 @@
 import { emptySplitApi as api } from "../../../shared/api/emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    detailsControllerCreate: build.mutation<
-      DetailsControllerCreateApiResponse,
-      DetailsControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/details`,
-        method: "POST",
-        body: queryArg.createDetailDto,
+export const addTagTypes = ["details"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      detailsControllerCreate: build.mutation<
+        DetailsControllerCreateApiResponse,
+        DetailsControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/details`,
+          method: "POST",
+          body: queryArg.createDetailDto,
+        }),
+        invalidatesTags: ["details"],
+      }),
+      detailsControllerFindAll: build.query<
+        DetailsControllerFindAllApiResponse,
+        DetailsControllerFindAllApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/details`,
+          params: {
+            query: queryArg.query,
+            sort: queryArg.sort,
+            order: queryArg.order,
+            limit: queryArg.limit,
+            page: queryArg.page,
+          },
+        }),
+        providesTags: ["details"],
+      }),
+      detailsControllerFindOne: build.query<
+        DetailsControllerFindOneApiResponse,
+        DetailsControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/details/${queryArg.id}` }),
+        providesTags: ["details"],
+      }),
+      detailsControllerUpdate: build.mutation<
+        DetailsControllerUpdateApiResponse,
+        DetailsControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/details/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updateDetailDto,
+        }),
+        invalidatesTags: ["details"],
+      }),
+      detailsControllerRemove: build.mutation<
+        DetailsControllerRemoveApiResponse,
+        DetailsControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/details/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["details"],
+      }),
+      detailsControllerAddParam: build.mutation<
+        DetailsControllerAddParamApiResponse,
+        DetailsControllerAddParamApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/details/${queryArg.id}/param`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["details"],
+      }),
+      detailsControllerRemoveParam: build.mutation<
+        DetailsControllerRemoveParamApiResponse,
+        DetailsControllerRemoveParamApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/details/${queryArg.id}/param/${queryArg.paramId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["details"],
       }),
     }),
-    detailsControllerFindAll: build.query<
-      DetailsControllerFindAllApiResponse,
-      DetailsControllerFindAllApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/details`,
-        params: {
-          query: queryArg.query,
-          sort: queryArg.sort,
-          order: queryArg.order,
-          limit: queryArg.limit,
-          page: queryArg.page,
-        },
-      }),
-    }),
-    detailsControllerFindOne: build.query<
-      DetailsControllerFindOneApiResponse,
-      DetailsControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/details/${queryArg.id}` }),
-    }),
-    detailsControllerUpdate: build.mutation<
-      DetailsControllerUpdateApiResponse,
-      DetailsControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/details/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updateDetailDto,
-      }),
-    }),
-    detailsControllerRemove: build.mutation<
-      DetailsControllerRemoveApiResponse,
-      DetailsControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/details/${queryArg.id}`,
-        method: "DELETE",
-      }),
-    }),
-    detailsControllerAddParam: build.mutation<
-      DetailsControllerAddParamApiResponse,
-      DetailsControllerAddParamApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/details/${queryArg.id}/param`,
-        method: "POST",
-        body: queryArg.body,
-      }),
-    }),
-    detailsControllerRemoveParam: build.mutation<
-      DetailsControllerRemoveParamApiResponse,
-      DetailsControllerRemoveParamApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/details/${queryArg.id}/param/${queryArg.paramId}`,
-        method: "DELETE",
-      }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as detailsApi };
 export type DetailsControllerCreateApiResponse = /** status 201  */ DetailDto;
 export type DetailsControllerCreateApiArg = {

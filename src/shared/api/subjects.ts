@@ -1,21 +1,28 @@
 import { emptySplitApi as api } from "./emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    subjectsControllerFindAll: build.query<
-      SubjectsControllerFindAllApiResponse,
-      SubjectsControllerFindAllApiArg
-    >({
-      query: () => ({ url: `/subjects` }),
+export const addTagTypesSubjects = ["subjects"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes: addTagTypesSubjects,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      subjectsControllerFindAll: build.query<
+        SubjectsControllerFindAllApiResponse,
+        SubjectsControllerFindAllApiArg
+      >({
+        query: () => ({ url: `/subjects` }),
+        providesTags: ["subjects"],
+      }),
+      subjectsControllerFindOne: build.query<
+        SubjectsControllerFindOneApiResponse,
+        SubjectsControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/subjects/${queryArg.id}` }),
+        providesTags: ["subjects"],
+      }),
     }),
-    subjectsControllerFindOne: build.query<
-      SubjectsControllerFindOneApiResponse,
-      SubjectsControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/subjects/${queryArg.id}` }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as subjectsApi };
 export type SubjectsControllerFindAllApiResponse =
   /** status 200  */ SubjectDto[];

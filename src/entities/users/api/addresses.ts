@@ -1,53 +1,63 @@
 import { emptySplitApi as api } from "../../../shared/api/emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    addressesControllerCreate: build.mutation<
-      AddressesControllerCreateApiResponse,
-      AddressesControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/addresses`,
-        method: "POST",
-        body: queryArg.createAddressDto,
+export const addTagTypes = ["addresses"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      addressesControllerCreate: build.mutation<
+        AddressesControllerCreateApiResponse,
+        AddressesControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/addresses`,
+          method: "POST",
+          body: queryArg.createAddressDto,
+        }),
+        invalidatesTags: ["addresses"],
+      }),
+      addressesControllerFindAll: build.query<
+        AddressesControllerFindAllApiResponse,
+        AddressesControllerFindAllApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/addresses`,
+          params: { query: queryArg.query },
+        }),
+        providesTags: ["addresses"],
+      }),
+      addressesControllerFindOne: build.query<
+        AddressesControllerFindOneApiResponse,
+        AddressesControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/addresses/${queryArg.id}` }),
+        providesTags: ["addresses"],
+      }),
+      addressesControllerUpdate: build.mutation<
+        AddressesControllerUpdateApiResponse,
+        AddressesControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/addresses/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updateAddressDto,
+        }),
+        invalidatesTags: ["addresses"],
+      }),
+      addressesControllerRemove: build.mutation<
+        AddressesControllerRemoveApiResponse,
+        AddressesControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/addresses/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["addresses"],
       }),
     }),
-    addressesControllerFindAll: build.query<
-      AddressesControllerFindAllApiResponse,
-      AddressesControllerFindAllApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/addresses`,
-        params: { query: queryArg.query },
-      }),
-    }),
-    addressesControllerFindOne: build.query<
-      AddressesControllerFindOneApiResponse,
-      AddressesControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/addresses/${queryArg.id}` }),
-    }),
-    addressesControllerUpdate: build.mutation<
-      AddressesControllerUpdateApiResponse,
-      AddressesControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/addresses/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updateAddressDto,
-      }),
-    }),
-    addressesControllerRemove: build.mutation<
-      AddressesControllerRemoveApiResponse,
-      AddressesControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/addresses/${queryArg.id}`,
-        method: "DELETE",
-      }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as addressesApi };
 export type AddressesControllerCreateApiResponse =
   /** status 201  */ AddressDto;

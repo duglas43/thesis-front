@@ -1,6 +1,12 @@
 import React from "react";
-import { PermissionsTable } from "@src/entities/permissions";
+import { pageContainerSx } from "@src/app/styles";
+import { Box } from "@mui/material";
+import { RolesPermissionMappingWidget } from "@src/widgets/RolesPermissionMappingWidget";
 
 export const RolesPermissionPage = () => {
-  return <PermissionsTable />;
+  return (
+    <Box sx={pageContainerSx}>
+      <RolesPermissionMappingWidget />
+    </Box>
+  )
 };

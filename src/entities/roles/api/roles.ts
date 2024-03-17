@@ -1,123 +1,143 @@
 import { emptySplitApi as api } from "../../../shared/api/emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    usersControllerFindRoles: build.query<
-      UsersControllerFindRolesApiResponse,
-      UsersControllerFindRolesApiArg
-    >({
-      query: (queryArg) => ({ url: `/users/${queryArg.id}/roles` }),
-    }),
-    usersControllerAddRoles: build.mutation<
-      UsersControllerAddRolesApiResponse,
-      UsersControllerAddRolesApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users/${queryArg.id}/roles`,
-        method: "POST",
-        body: queryArg.body,
+export const addTagTypes = ["users", "roles"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      usersControllerFindRoles: build.query<
+        UsersControllerFindRolesApiResponse,
+        UsersControllerFindRolesApiArg
+      >({
+        query: (queryArg) => ({ url: `/users/${queryArg.id}/roles` }),
+        providesTags: ["users"],
+      }),
+      usersControllerAddRoles: build.mutation<
+        UsersControllerAddRolesApiResponse,
+        UsersControllerAddRolesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}/roles`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["users"],
+      }),
+      usersControllerRemoveRoles: build.mutation<
+        UsersControllerRemoveRolesApiResponse,
+        UsersControllerRemoveRolesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}/roles`,
+          method: "DELETE",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["users"],
+      }),
+      rolesControllerCreate: build.mutation<
+        RolesControllerCreateApiResponse,
+        RolesControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/roles`,
+          method: "POST",
+          body: queryArg.createRoleDto,
+        }),
+        invalidatesTags: ["roles"],
+      }),
+      rolesControllerFindAll: build.query<
+        RolesControllerFindAllApiResponse,
+        RolesControllerFindAllApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/roles`,
+          params: {
+            query: queryArg.query,
+            sort: queryArg.sort,
+            order: queryArg.order,
+            limit: queryArg.limit,
+            page: queryArg.page,
+          },
+        }),
+        providesTags: ["roles"],
+      }),
+      rolesControllerFindAllPaginated: build.query<
+        RolesControllerFindAllPaginatedApiResponse,
+        RolesControllerFindAllPaginatedApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/roles/paginated`,
+          params: {
+            query: queryArg.query,
+            sort: queryArg.sort,
+            order: queryArg.order,
+            limit: queryArg.limit,
+            page: queryArg.page,
+          },
+        }),
+        providesTags: ["roles"],
+      }),
+      rolesControllerFindOne: build.query<
+        RolesControllerFindOneApiResponse,
+        RolesControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/roles/${queryArg.id}` }),
+        providesTags: ["roles"],
+      }),
+      rolesControllerUpdate: build.mutation<
+        RolesControllerUpdateApiResponse,
+        RolesControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/roles/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updateRoleDto,
+        }),
+        invalidatesTags: ["roles"],
+      }),
+      rolesControllerRemove: build.mutation<
+        RolesControllerRemoveApiResponse,
+        RolesControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/roles/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["roles"],
+      }),
+      rolesControllerFindPermissions: build.query<
+        RolesControllerFindPermissionsApiResponse,
+        RolesControllerFindPermissionsApiArg
+      >({
+        query: (queryArg) => ({ url: `/roles/${queryArg.id}/permissions` }),
+        providesTags: ["roles"],
+      }),
+      rolesControllerAddPermissions: build.mutation<
+        RolesControllerAddPermissionsApiResponse,
+        RolesControllerAddPermissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/roles/${queryArg.id}/permissions`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["roles"],
+      }),
+      rolesControllerRemovePermissions: build.mutation<
+        RolesControllerRemovePermissionsApiResponse,
+        RolesControllerRemovePermissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/roles/${queryArg.id}/permissions`,
+          method: "DELETE",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["roles"],
       }),
     }),
-    usersControllerRemoveRoles: build.mutation<
-      UsersControllerRemoveRolesApiResponse,
-      UsersControllerRemoveRolesApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users/${queryArg.id}/roles`,
-        method: "DELETE",
-        body: queryArg.body,
-      }),
-    }),
-    rolesControllerCreate: build.mutation<
-      RolesControllerCreateApiResponse,
-      RolesControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/roles`,
-        method: "POST",
-        body: queryArg.createRoleDto,
-      }),
-    }),
-    rolesControllerFindAll: build.query<
-      RolesControllerFindAllApiResponse,
-      RolesControllerFindAllApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/roles`,
-        params: {
-          query: queryArg.query,
-          sort: queryArg.sort,
-          order: queryArg.order,
-          limit: queryArg.limit,
-          page: queryArg.page,
-        },
-      }),
-    }),
-    rolesControllerFindAllPaginated: build.query<
-      RolesControllerFindAllPaginatedApiResponse,
-      RolesControllerFindAllPaginatedApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/roles/paginated`,
-        params: {
-          query: queryArg.query,
-          sort: queryArg.sort,
-          order: queryArg.order,
-          limit: queryArg.limit,
-          page: queryArg.page,
-        },
-      }),
-    }),
-    rolesControllerFindOne: build.query<
-      RolesControllerFindOneApiResponse,
-      RolesControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/roles/${queryArg.id}` }),
-    }),
-    rolesControllerUpdate: build.mutation<
-      RolesControllerUpdateApiResponse,
-      RolesControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/roles/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updateRoleDto,
-      }),
-    }),
-    rolesControllerRemove: build.mutation<
-      RolesControllerRemoveApiResponse,
-      RolesControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({ url: `/roles/${queryArg.id}`, method: "DELETE" }),
-    }),
-    rolesControllerFindPermissions: build.query<
-      RolesControllerFindPermissionsApiResponse,
-      RolesControllerFindPermissionsApiArg
-    >({
-      query: (queryArg) => ({ url: `/roles/${queryArg.id}/permissions` }),
-    }),
-    rolesControllerAddPermissions: build.mutation<
-      RolesControllerAddPermissionsApiResponse,
-      RolesControllerAddPermissionsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/roles/${queryArg.id}/permissions`,
-        method: "POST",
-        body: queryArg.body,
-      }),
-    }),
-    rolesControllerRemovePermissions: build.mutation<
-      RolesControllerRemovePermissionsApiResponse,
-      RolesControllerRemovePermissionsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/roles/${queryArg.id}/permissions`,
-        method: "DELETE",
-        body: queryArg.body,
-      }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as rolesApi };
 export type UsersControllerFindRolesApiResponse = /** status 200  */ RoleDto[];
 export type UsersControllerFindRolesApiArg = {

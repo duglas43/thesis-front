@@ -1,53 +1,63 @@
 import { emptySplitApi as api } from "../../../shared/api/emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    paramsControllerCreate: build.mutation<
-      ParamsControllerCreateApiResponse,
-      ParamsControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/params`,
-        method: "POST",
-        body: queryArg.createParamDto,
+export const addTagTypesParams = ["params"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes: addTagTypesParams,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      paramsControllerCreate: build.mutation<
+        ParamsControllerCreateApiResponse,
+        ParamsControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/params`,
+          method: "POST",
+          body: queryArg.createParamDto,
+        }),
+        invalidatesTags: ["params"],
+      }),
+      paramsControllerFindAll: build.query<
+        ParamsControllerFindAllApiResponse,
+        ParamsControllerFindAllApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/params`,
+          params: { query: queryArg.query },
+        }),
+        providesTags: ["params"],
+      }),
+      paramsControllerFindOne: build.query<
+        ParamsControllerFindOneApiResponse,
+        ParamsControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/params/${queryArg.id}` }),
+        providesTags: ["params"],
+      }),
+      paramsControllerUpdate: build.mutation<
+        ParamsControllerUpdateApiResponse,
+        ParamsControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/params/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updateParamDto,
+        }),
+        invalidatesTags: ["params"],
+      }),
+      paramsControllerRemove: build.mutation<
+        ParamsControllerRemoveApiResponse,
+        ParamsControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/params/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["params"],
       }),
     }),
-    paramsControllerFindAll: build.query<
-      ParamsControllerFindAllApiResponse,
-      ParamsControllerFindAllApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/params`,
-        params: { query: queryArg.query },
-      }),
-    }),
-    paramsControllerFindOne: build.query<
-      ParamsControllerFindOneApiResponse,
-      ParamsControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/params/${queryArg.id}` }),
-    }),
-    paramsControllerUpdate: build.mutation<
-      ParamsControllerUpdateApiResponse,
-      ParamsControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/params/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updateParamDto,
-      }),
-    }),
-    paramsControllerRemove: build.mutation<
-      ParamsControllerRemoveApiResponse,
-      ParamsControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/params/${queryArg.id}`,
-        method: "DELETE",
-      }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as paramsApi };
 export type ParamsControllerCreateApiResponse = /** status 201  */ ParamDto;
 export type ParamsControllerCreateApiArg = {

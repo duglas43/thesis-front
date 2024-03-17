@@ -5,6 +5,7 @@ const config: ConfigFile = {
   apiFile: "./src/shared/api/emptyApi.ts",
   apiImport: "emptySplitApi",
   useEnumType: true,
+  tag: true,
   hooks: {
     lazyQueries: true,
     mutations: true,

@@ -1,114 +1,134 @@
 import { emptySplitApi as api } from "../../../shared/api/emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    usersControllerCreate: build.mutation<
-      UsersControllerCreateApiResponse,
-      UsersControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users`,
-        method: "POST",
-        body: queryArg.createUserDto,
+export const addTagTypes = ["users"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      usersControllerCreate: build.mutation<
+        UsersControllerCreateApiResponse,
+        UsersControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users`,
+          method: "POST",
+          body: queryArg.createUserDto,
+        }),
+        invalidatesTags: ["users"],
+      }),
+      usersControllerFindAll: build.query<
+        UsersControllerFindAllApiResponse,
+        UsersControllerFindAllApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users`,
+          params: {
+            query: queryArg.query,
+            sort: queryArg.sort,
+            order: queryArg.order,
+            limit: queryArg.limit,
+            page: queryArg.page,
+          },
+        }),
+        providesTags: ["users"],
+      }),
+      usersControllerFindMe: build.query<
+        UsersControllerFindMeApiResponse,
+        UsersControllerFindMeApiArg
+      >({
+        query: () => ({ url: `/users/me` }),
+        providesTags: ["users"],
+      }),
+      usersControllerFindOne: build.query<
+        UsersControllerFindOneApiResponse,
+        UsersControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/users/${queryArg.id}` }),
+        providesTags: ["users"],
+      }),
+      usersControllerUpdate: build.mutation<
+        UsersControllerUpdateApiResponse,
+        UsersControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updateUserDto,
+        }),
+        invalidatesTags: ["users"],
+      }),
+      usersControllerRemove: build.mutation<
+        UsersControllerRemoveApiResponse,
+        UsersControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["users"],
+      }),
+      usersControllerFindRoles: build.query<
+        UsersControllerFindRolesApiResponse,
+        UsersControllerFindRolesApiArg
+      >({
+        query: (queryArg) => ({ url: `/users/${queryArg.id}/roles` }),
+        providesTags: ["users"],
+      }),
+      usersControllerAddRoles: build.mutation<
+        UsersControllerAddRolesApiResponse,
+        UsersControllerAddRolesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}/roles`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["users"],
+      }),
+      usersControllerRemoveRoles: build.mutation<
+        UsersControllerRemoveRolesApiResponse,
+        UsersControllerRemoveRolesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}/roles`,
+          method: "DELETE",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["users"],
+      }),
+      usersControllerFindPermissions: build.query<
+        UsersControllerFindPermissionsApiResponse,
+        UsersControllerFindPermissionsApiArg
+      >({
+        query: (queryArg) => ({ url: `/users/${queryArg.id}/permissions` }),
+        providesTags: ["users"],
+      }),
+      usersControllerAddPermissions: build.mutation<
+        UsersControllerAddPermissionsApiResponse,
+        UsersControllerAddPermissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}/permissions`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["users"],
+      }),
+      usersControllerRemovePermissions: build.mutation<
+        UsersControllerRemovePermissionsApiResponse,
+        UsersControllerRemovePermissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/users/${queryArg.id}/permissions`,
+          method: "DELETE",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["users"],
       }),
     }),
-    usersControllerFindAll: build.query<
-      UsersControllerFindAllApiResponse,
-      UsersControllerFindAllApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users`,
-        params: {
-          query: queryArg.query,
-          sort: queryArg.sort,
-          order: queryArg.order,
-          limit: queryArg.limit,
-          page: queryArg.page,
-        },
-      }),
-    }),
-    usersControllerFindMe: build.query<
-      UsersControllerFindMeApiResponse,
-      UsersControllerFindMeApiArg
-    >({
-      query: () => ({ url: `/users/me` }),
-    }),
-    usersControllerFindOne: build.query<
-      UsersControllerFindOneApiResponse,
-      UsersControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/users/${queryArg.id}` }),
-    }),
-    usersControllerUpdate: build.mutation<
-      UsersControllerUpdateApiResponse,
-      UsersControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updateUserDto,
-      }),
-    }),
-    usersControllerRemove: build.mutation<
-      UsersControllerRemoveApiResponse,
-      UsersControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({ url: `/users/${queryArg.id}`, method: "DELETE" }),
-    }),
-    usersControllerFindRoles: build.query<
-      UsersControllerFindRolesApiResponse,
-      UsersControllerFindRolesApiArg
-    >({
-      query: (queryArg) => ({ url: `/users/${queryArg.id}/roles` }),
-    }),
-    usersControllerAddRoles: build.mutation<
-      UsersControllerAddRolesApiResponse,
-      UsersControllerAddRolesApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users/${queryArg.id}/roles`,
-        method: "POST",
-        body: queryArg.body,
-      }),
-    }),
-    usersControllerRemoveRoles: build.mutation<
-      UsersControllerRemoveRolesApiResponse,
-      UsersControllerRemoveRolesApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users/${queryArg.id}/roles`,
-        method: "DELETE",
-        body: queryArg.body,
-      }),
-    }),
-    usersControllerFindPermissions: build.query<
-      UsersControllerFindPermissionsApiResponse,
-      UsersControllerFindPermissionsApiArg
-    >({
-      query: (queryArg) => ({ url: `/users/${queryArg.id}/permissions` }),
-    }),
-    usersControllerAddPermissions: build.mutation<
-      UsersControllerAddPermissionsApiResponse,
-      UsersControllerAddPermissionsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users/${queryArg.id}/permissions`,
-        method: "POST",
-        body: queryArg.body,
-      }),
-    }),
-    usersControllerRemovePermissions: build.mutation<
-      UsersControllerRemovePermissionsApiResponse,
-      UsersControllerRemovePermissionsApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/users/${queryArg.id}/permissions`,
-        method: "DELETE",
-        body: queryArg.body,
-      }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as usersApi };
 export type UsersControllerCreateApiResponse = /** status 201  */ UserDto;
 export type UsersControllerCreateApiArg = {

@@ -1,72 +1,84 @@
 import { emptySplitApi as api } from "../../../shared/api/emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    ordersControllerCreate: build.mutation<
-      OrdersControllerCreateApiResponse,
-      OrdersControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/orders`,
-        method: "POST",
-        body: queryArg.createOrderDto,
+export const addTagTypes = ["orders"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      ordersControllerCreate: build.mutation<
+        OrdersControllerCreateApiResponse,
+        OrdersControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders`,
+          method: "POST",
+          body: queryArg.createOrderDto,
+        }),
+        invalidatesTags: ["orders"],
+      }),
+      ordersControllerFindAll: build.query<
+        OrdersControllerFindAllApiResponse,
+        OrdersControllerFindAllApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders`,
+          params: { query: queryArg.query },
+        }),
+        providesTags: ["orders"],
+      }),
+      ordersControllerFindOne: build.query<
+        OrdersControllerFindOneApiResponse,
+        OrdersControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/orders/${queryArg.id}` }),
+        providesTags: ["orders"],
+      }),
+      ordersControllerUpdate: build.mutation<
+        OrdersControllerUpdateApiResponse,
+        OrdersControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updateOrderDto,
+        }),
+        invalidatesTags: ["orders"],
+      }),
+      ordersControllerRemove: build.mutation<
+        OrdersControllerRemoveApiResponse,
+        OrdersControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["orders"],
+      }),
+      ordersControllerAddMachine: build.mutation<
+        OrdersControllerAddMachineApiResponse,
+        OrdersControllerAddMachineApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders/${queryArg.id}/machine`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["orders"],
+      }),
+      ordersControllerRemoveMachine: build.mutation<
+        OrdersControllerRemoveMachineApiResponse,
+        OrdersControllerRemoveMachineApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders/${queryArg.id}/machine/${queryArg.machineId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["orders"],
       }),
     }),
-    ordersControllerFindAll: build.query<
-      OrdersControllerFindAllApiResponse,
-      OrdersControllerFindAllApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/orders`,
-        params: { query: queryArg.query },
-      }),
-    }),
-    ordersControllerFindOne: build.query<
-      OrdersControllerFindOneApiResponse,
-      OrdersControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/orders/${queryArg.id}` }),
-    }),
-    ordersControllerUpdate: build.mutation<
-      OrdersControllerUpdateApiResponse,
-      OrdersControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/orders/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updateOrderDto,
-      }),
-    }),
-    ordersControllerRemove: build.mutation<
-      OrdersControllerRemoveApiResponse,
-      OrdersControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/orders/${queryArg.id}`,
-        method: "DELETE",
-      }),
-    }),
-    ordersControllerAddMachine: build.mutation<
-      OrdersControllerAddMachineApiResponse,
-      OrdersControllerAddMachineApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/orders/${queryArg.id}/machine`,
-        method: "POST",
-        body: queryArg.body,
-      }),
-    }),
-    ordersControllerRemoveMachine: build.mutation<
-      OrdersControllerRemoveMachineApiResponse,
-      OrdersControllerRemoveMachineApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/orders/${queryArg.id}/machine/${queryArg.machineId}`,
-        method: "DELETE",
-      }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as ordersApi };
 export type OrdersControllerCreateApiResponse = /** status 201  */ OrderDto;
 export type OrdersControllerCreateApiArg = {

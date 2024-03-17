@@ -1,59 +1,69 @@
 import { emptySplitApi as api } from "../../../shared/api/emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    machinesControllerCreate: build.mutation<
-      MachinesControllerCreateApiResponse,
-      MachinesControllerCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/machines`,
-        method: "POST",
-        body: queryArg.createMachineDto,
+export const addTagTypes = ["machines"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      machinesControllerCreate: build.mutation<
+        MachinesControllerCreateApiResponse,
+        MachinesControllerCreateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/machines`,
+          method: "POST",
+          body: queryArg.createMachineDto,
+        }),
+        invalidatesTags: ["machines"],
+      }),
+      machinesControllerFindAll: build.query<
+        MachinesControllerFindAllApiResponse,
+        MachinesControllerFindAllApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/machines`,
+          params: {
+            query: queryArg.query,
+            sort: queryArg.sort,
+            order: queryArg.order,
+            limit: queryArg.limit,
+            page: queryArg.page,
+          },
+        }),
+        providesTags: ["machines"],
+      }),
+      machinesControllerFindOne: build.query<
+        MachinesControllerFindOneApiResponse,
+        MachinesControllerFindOneApiArg
+      >({
+        query: (queryArg) => ({ url: `/machines/${queryArg.id}` }),
+        providesTags: ["machines"],
+      }),
+      machinesControllerUpdate: build.mutation<
+        MachinesControllerUpdateApiResponse,
+        MachinesControllerUpdateApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/machines/${queryArg.id}`,
+          method: "PATCH",
+          body: queryArg.updateMachineDto,
+        }),
+        invalidatesTags: ["machines"],
+      }),
+      machinesControllerRemove: build.mutation<
+        MachinesControllerRemoveApiResponse,
+        MachinesControllerRemoveApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/machines/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["machines"],
       }),
     }),
-    machinesControllerFindAll: build.query<
-      MachinesControllerFindAllApiResponse,
-      MachinesControllerFindAllApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/machines`,
-        params: {
-          query: queryArg.query,
-          sort: queryArg.sort,
-          order: queryArg.order,
-          limit: queryArg.limit,
-          page: queryArg.page,
-        },
-      }),
-    }),
-    machinesControllerFindOne: build.query<
-      MachinesControllerFindOneApiResponse,
-      MachinesControllerFindOneApiArg
-    >({
-      query: (queryArg) => ({ url: `/machines/${queryArg.id}` }),
-    }),
-    machinesControllerUpdate: build.mutation<
-      MachinesControllerUpdateApiResponse,
-      MachinesControllerUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/machines/${queryArg.id}`,
-        method: "PATCH",
-        body: queryArg.updateMachineDto,
-      }),
-    }),
-    machinesControllerRemove: build.mutation<
-      MachinesControllerRemoveApiResponse,
-      MachinesControllerRemoveApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/machines/${queryArg.id}`,
-        method: "DELETE",
-      }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as machinesApi };
 export type MachinesControllerCreateApiResponse = /** status 201  */ MachineDto;
 export type MachinesControllerCreateApiArg = {

@@ -1,41 +1,50 @@
 import { emptySplitApi as api } from "../../../shared/api/emptyApi";
-const injectedRtkApi = api.injectEndpoints({
-  endpoints: (build) => ({
-    authControllerSignUp: build.mutation<
-      AuthControllerSignUpApiResponse,
-      AuthControllerSignUpApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/auth/signup`,
-        method: "POST",
-        body: queryArg.signUpDto,
+export const addTagTypes = ["auth"] as const;
+const injectedRtkApi = api
+  .enhanceEndpoints({
+    addTagTypes,
+  })
+  .injectEndpoints({
+    endpoints: (build) => ({
+      authControllerSignUp: build.mutation<
+        AuthControllerSignUpApiResponse,
+        AuthControllerSignUpApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/auth/signup`,
+          method: "POST",
+          body: queryArg.signUpDto,
+        }),
+        invalidatesTags: ["auth"],
+      }),
+      authControllerSignIn: build.mutation<
+        AuthControllerSignInApiResponse,
+        AuthControllerSignInApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/auth/signin`,
+          method: "POST",
+          body: queryArg.signInDto,
+        }),
+        invalidatesTags: ["auth"],
+      }),
+      authControllerRefresh: build.mutation<
+        AuthControllerRefreshApiResponse,
+        AuthControllerRefreshApiArg
+      >({
+        query: () => ({ url: `/auth/refresh`, method: "POST" }),
+        invalidatesTags: ["auth"],
+      }),
+      authControllerLogout: build.mutation<
+        AuthControllerLogoutApiResponse,
+        AuthControllerLogoutApiArg
+      >({
+        query: () => ({ url: `/auth/logout`, method: "POST" }),
+        invalidatesTags: ["auth"],
       }),
     }),
-    authControllerSignIn: build.mutation<
-      AuthControllerSignInApiResponse,
-      AuthControllerSignInApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/auth/signin`,
-        method: "POST",
-        body: queryArg.signInDto,
-      }),
-    }),
-    authControllerRefresh: build.mutation<
-      AuthControllerRefreshApiResponse,
-      AuthControllerRefreshApiArg
-    >({
-      query: () => ({ url: `/auth/refresh`, method: "POST" }),
-    }),
-    authControllerLogout: build.mutation<
-      AuthControllerLogoutApiResponse,
-      AuthControllerLogoutApiArg
-    >({
-      query: () => ({ url: `/auth/logout`, method: "POST" }),
-    }),
-  }),
-  overrideExisting: false,
-});
+    overrideExisting: false,
+  });
 export { injectedRtkApi as authApi };
 export type AuthControllerSignUpApiResponse = /** status 201  */ AccessDto;
 export type AuthControllerSignUpApiArg = {

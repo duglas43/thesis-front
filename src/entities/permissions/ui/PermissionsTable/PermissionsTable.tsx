@@ -164,17 +164,6 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
       <DataGrid
         rows={data || []}
         columns={columns}
-        slots={{
-          toolbar: PermissionTableToolbar,
-          ...props.slots,
-        }}
-        slotProps={{
-          toolbar: {
-            onAddClick: handleAddClick,
-            setRowModesModel,
-          },
-          ...props.slotProps,
-        }}
         localeText={me ? getLocalizationLocaleText(me.language) : undefined}
         editMode="row"
         getRowHeight={() => "auto"}
@@ -183,6 +172,17 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         {...props}
+        slots={{
+          toolbar: PermissionTableToolbar,
+          ...props.slots,
+        }}
+        slotProps={{
+          toolbar: {
+            onAddClick: handleAddClick,
+            setRowModesModel,
+            ...props.slotProps?.toolbar,
+          },
+        }}
         loading={
           isLoading ||
           isCreating ||
