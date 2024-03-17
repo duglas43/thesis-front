@@ -5,30 +5,22 @@ import {
   GridRowId,
   GridRowModesModel,
   GridRowModes,
-  GridPreProcessEditCellProps,
 } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useTranslation } from "react-i18next";
 import { SubjectDto } from "@src/shared/api";
-import { PermissionDto, ACTIONS } from "@entities/permissions";
+import {
+  PermissionDto,
+  ACTIONS,
+  PermissionConditionDto,
+} from "@entities/permissions";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ErrorableCell, TagCell } from "@src/shared/ui";
-import * as yup from "yup";
+import { TagCell } from "@src/shared/ui";
 import { PermissionTableFieldCell } from "./FieldCell";
+import { MonacoEditorEditCell } from "./MonacoEditorEditCell";
 
-// const handleEditClick = (id: GridRowId) => () => {
-//   setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-// };
-
-// const handleSaveClick = (id: GridRowId) => () => {
-//   setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-// };
-
-// const handleDeleteClick = (id: GridRowId) => () => {
-//   setRows(rows.filter((row) => row.id !== id));
-// };
 export interface usePermissionsTableColumnsProps {
   handleEditClick: (id: GridRowId) => () => void;
   handleSaveClick: (id: GridRowId) => () => void;
@@ -104,8 +96,8 @@ export const usePermissionsTableColumns = ({
         sortable: false,
         headerName: t("fields"),
         editable: true,
-        flex: 0.2,
-        minWidth: 100,
+        flex: 0.5,
+        minWidth: 200,
         filterable: false,
         renderCell: (params) => <PermissionTableFieldCell {...params} />,
         renderEditCell: (params) => <TagCell {...params} />,
@@ -114,9 +106,34 @@ export const usePermissionsTableColumns = ({
         field: "conditions",
         sortable: false,
         headerName: t("conditions"),
-        flex: 0.2,
-        minWidth: 100,
+        flex: 0.5,
+        minWidth: 200,
+        editable: true,
         filterable: false,
+        cellClassName: "wrap-text",
+        valueGetter: (params) =>
+          params.value.reduce(
+            (acc: any, condition: PermissionConditionDto) => ({
+              ...acc,
+              [condition.key]: condition.value,
+            }),
+            {}
+          ),
+        valueSetter: (params) => {
+          try {
+            const parsedJson = JSON.parse(params.value);
+            return {
+              ...params.row,
+              conditions: Object.entries(parsedJson).map(
+                ([key, value]) => ({ key, value } as PermissionConditionDto)
+              ),
+            };
+          } catch (e) {
+            return params.row;
+          }
+        },
+        valueFormatter: (params) => JSON.stringify(params.value, null, 2),
+        renderEditCell: (params) => <MonacoEditorEditCell {...params} />,
       },
       {
         field: "actions",

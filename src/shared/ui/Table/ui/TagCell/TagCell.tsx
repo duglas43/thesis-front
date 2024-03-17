@@ -16,7 +16,6 @@ export const TagCell = forwardRef<
       multiple
       id="fields"
       freeSolo
-      sx={{ height: "100%", p: 0, m: 0 }}
       fullWidth
       options={[]}
       value={fields}
@@ -24,19 +23,10 @@ export const TagCell = forwardRef<
       renderInput={(params) => (
         <TextField
           {...params}
-          size="small"
           name="fields"
           error={!!error}
           helperText={error}
           value={fields}
-          sx={{
-            p: 0,
-            m: 0,
-            height: "100%",
-            "& .MuiInputBase-root": {
-              height: "100%",
-            },
-          }}
         />
       )}
       onChange={(event, newValue) => {

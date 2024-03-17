@@ -199,7 +199,6 @@ export const PermissionForm: FC<PermissionFormProps> = ({
           defaultValue="{}"
           height={100}
           width={400}
-          // className="some"
           options={{
             minimap: { enabled: false },
             lineNumbers: "off",

@@ -84,7 +84,7 @@ body {
   display: none;
 }
 
-.some {
+.monaco-editor-read-only {
   opacity: 0.5;
   pointer-events: none;
   cursor: not-allowed;
@@ -96,4 +96,8 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-tap-highlight-color: transparent;
+}
+.wrap-text {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }

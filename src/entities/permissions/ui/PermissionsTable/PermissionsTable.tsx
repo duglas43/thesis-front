@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import {
   ACTIONS,
+  PermissionDto,
   usePermissionsControllerFindAllQuery,
   usePermissionsControllerCreateMutation,
   usePermissionsControllerRemoveMutation,
@@ -8,6 +9,7 @@ import {
   usePermissionConditionsControllerRemoveMutation,
   usePermissionFieldsControllerCreateMutation,
   usePermissionFieldsControllerRemoveMutation,
+  usePermissionsControllerUpdateMutation,
 } from "@entities/permissions";
 import { useSubjectsControllerFindAllQuery } from "@src/shared/api";
 import { useUsersControllerFindMeQuery } from "@entities/users";
@@ -32,17 +34,19 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
-  const [createdPermission, { isLoading: isCreating }] =
+  const [createPermission, { isLoading: isCreating }] =
     usePermissionsControllerCreateMutation();
-  const [deletedPermission, { isLoading: isDeleting }] =
+  const [updatePermission, { isLoading: isUpdating }] =
+    usePermissionsControllerUpdateMutation();
+  const [deletePermission, { isLoading: isDeleting }] =
     usePermissionsControllerRemoveMutation();
-  const [createdPermissionCondition, { isLoading: isCreatingCondition }] =
+  const [createPermissionCondition, { isLoading: isCreatingCondition }] =
     usePermissionConditionsControllerCreateMutation();
-  const [deletedPermissionCondition, { isLoading: isDeletingCondition }] =
+  const [deletePermissionCondition, { isLoading: isDeletingCondition }] =
     usePermissionConditionsControllerRemoveMutation();
-  const [createdPermissionField, { isLoading: isCreatingField }] =
+  const [createPermissionField, { isLoading: isCreatingField }] =
     usePermissionFieldsControllerCreateMutation();
-  const [deletedPermissionField, { isLoading: isDeletingField }] =
+  const [deletePermissionField, { isLoading: isDeletingField }] =
     usePermissionFieldsControllerRemoveMutation();
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
@@ -70,11 +74,11 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
     });
   };
   const handleDeleteClick = (id: GridRowId) => () => {
-    deletedPermission({ id: Number(id) });
+    deletePermission({ id: Number(id) });
   };
 
   const handleAddClick = async () => {
-    const newPermission = await createdPermission({
+    const newPermission = await createPermission({
       createPermissionDto: {
         modality: true,
         action: ACTIONS.Read,
@@ -87,10 +91,64 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    console.log("updatedRow", updatedRow);
-    return updatedRow;
+  const processRowUpdate = async (
+    newRow: GridRowModel<PermissionDto>,
+    oldRow: GridRowModel<PermissionDto>
+  ) => {
+    await updatePermission({
+      id: Number(newRow.id),
+      updatePermissionDto: {
+        modality: newRow.modality,
+        action: newRow.action,
+        subjectId: Number(newRow.subjectId),
+      },
+    });
+    const fieldsToAdd = newRow.fields.filter((field) => !field.id);
+    const fieldsToRemove = oldRow.fields.filter(
+      (oldField) =>
+        oldField.id &&
+        !newRow.fields.some((newField) => newField.id === oldField.id)
+    );
+
+    const conditionsToAdd = newRow.conditions.filter(
+      (condition) => !condition.id
+    );
+    const conditionsToRemove = oldRow.conditions.filter(
+      (oldCondition) =>
+        oldCondition.id &&
+        !newRow.conditions.some(
+          (newCondition) => newCondition.id === oldCondition.id
+        )
+    );
+
+    await Promise.all([
+      ...fieldsToAdd.map((field) =>
+        createPermissionField({
+          createPermissionFieldDto: {
+            permissionId: Number(newRow.id),
+            name: field.name,
+          },
+        })
+      ),
+      ...fieldsToRemove.map((field) =>
+        deletePermissionField({ id: Number(field.id) })
+      ),
+      ...conditionsToAdd.map((condition) =>
+        createPermissionCondition({
+          createPermissionConditionDto: {
+            permissionId: Number(newRow.id),
+            key: condition.key,
+            value: condition.value,
+          },
+        })
+      ),
+      ...conditionsToRemove.map((condition) =>
+        deletePermissionCondition({ id: Number(condition.id) })
+      ),
+    ]);
+
+    await refetch();
+    return newRow;
   };
 
   const columns = usePermissionsTableColumns({
@@ -125,7 +183,17 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         {...props}
-        loading={isLoading || isCreating || isDeleting || props.loading}
+        loading={
+          isLoading ||
+          isCreating ||
+          isDeleting ||
+          isUpdating ||
+          isCreatingCondition ||
+          isDeletingCondition ||
+          isCreatingField ||
+          isDeletingField ||
+          !!props.loading
+        }
       />
     </>
   );
