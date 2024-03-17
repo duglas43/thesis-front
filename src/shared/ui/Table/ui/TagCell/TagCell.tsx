@@ -25,7 +25,6 @@ export const TagCell = forwardRef<
         <TextField
           {...params}
           size="small"
-          label="fields"
           name="fields"
           error={!!error}
           helperText={error}

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import {
+  ACTIONS,
   usePermissionsControllerFindAllQuery,
   usePermissionsControllerCreateMutation,
   usePermissionsControllerRemoveMutation,
@@ -19,7 +20,6 @@ import {
   GridRowModel,
   GridEventListener,
   GridRowEditStopReasons,
-  GridCallbackDetails,
 } from "@mui/x-data-grid";
 import { getLocalizationLocaleText } from "@shared/ui";
 import { usePermissionsTableColumns } from "./columns";
@@ -27,9 +27,8 @@ import { PermissionTableToolbar } from "./Toolbar";
 
 export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
   const { data: me } = useUsersControllerFindMeQuery();
-  const { data, isLoading } = usePermissionsControllerFindAllQuery();
+  const { data, isLoading, refetch } = usePermissionsControllerFindAllQuery();
   const { data: subjects } = useSubjectsControllerFindAllQuery();
-  const [rows, setRows] = React.useState<GridRowModel[]>([]);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
   );
@@ -61,26 +60,39 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
-
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
-
   const handleCancelClick = (id: GridRowId) => () => {
     setRowModesModel({
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
-
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
   };
-
   const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+    deletedPermission({ id: Number(id) });
   };
+
+  const handleAddClick = async () => {
+    const newPermission = await createdPermission({
+      createPermissionDto: {
+        modality: true,
+        action: ACTIONS.Read,
+        subjectId: 1,
+      },
+    }).unwrap();
+    await refetch();
+    return newPermission;
+  };
+  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+  const processRowUpdate = (newRow: GridRowModel) => {
+    const updatedRow = { ...newRow, isNew: false };
+    console.log("updatedRow", updatedRow);
+    return updatedRow;
+  };
+
   const columns = usePermissionsTableColumns({
     handleEditClick,
     handleSaveClick,
@@ -89,29 +101,10 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
     rowModesModel,
     subjects,
   });
-
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    console.log("updatedRow", updatedRow);
-    return updatedRow;
-  };
-
-  const handleRowModesModelChange = (
-    newRowModesModel: GridRowModesModel,
-    details: GridCallbackDetails
-  ) => {
-    setRowModesModel(newRowModesModel);
-  };
-
-  React.useEffect(() => {
-    if (data) {
-      setRows(data);
-    }
-  }, [data]);
   return (
     <>
       <DataGrid
-        rows={rows}
+        rows={data || []}
         columns={columns}
         slots={{
           toolbar: PermissionTableToolbar,
@@ -119,7 +112,7 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
         }}
         slotProps={{
           toolbar: {
-            setRows,
+            onAddClick: handleAddClick,
             setRowModesModel,
           },
           ...props.slotProps,

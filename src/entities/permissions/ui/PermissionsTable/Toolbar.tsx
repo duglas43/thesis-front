@@ -1,12 +1,10 @@
 import React, { FC } from "react";
-import { CreatePermissionDto, ACTIONS } from "@src/entities/permissions";
+import { PermissionDto } from "@src/entities/permissions";
 import {
   GridToolbarContainer,
   GridToolbarDensitySelector,
   GridToolbarExport,
   GridToolbarColumnsButton,
-  GridToolbarQuickFilter,
-  GridRowsProp,
   GridRowModesModel,
   GridRowModes,
 } from "@mui/x-data-grid";
@@ -15,26 +13,21 @@ import AddIcon from "@mui/icons-material/Add";
 import { useTranslation } from "react-i18next";
 
 export interface PermissionTableToolbarProps {
-  setRows: (
-    newRows: (
-      oldRows: GridRowsProp<CreatePermissionDto>
-    ) => GridRowsProp<Partial<CreatePermissionDto>>
-  ) => void;
+  onAddClick: () => Promise<PermissionDto>;
   setRowModesModel: (
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel
   ) => void;
 }
 export const PermissionTableToolbar: FC<PermissionTableToolbarProps> =
-  React.memo(({ setRows, setRowModesModel }) => {
-    const id = "new";
-    const handleClick = () => {
-      setRows((oldRows) => [
-        ...oldRows,
-        { modality: true, action: ACTIONS.Read, id: "new" },
-      ]);
+  React.memo(({ onAddClick, setRowModesModel }) => {
+    const handleClick = async () => {
+      const newPermission = await onAddClick();
       setRowModesModel((oldModel) => ({
         ...oldModel,
-        [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+        [newPermission.id]: {
+          mode: GridRowModes.Edit,
+          fieldToFocus: "modality",
+        },
       }));
     };
 
@@ -55,7 +48,6 @@ export const PermissionTableToolbar: FC<PermissionTableToolbarProps> =
           <GridToolbarDensitySelector />
           <GridToolbarExport />
         </Box>
-        <GridToolbarQuickFilter />
       </GridToolbarContainer>
     );
   });
