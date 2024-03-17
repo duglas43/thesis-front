@@ -89,7 +89,11 @@ export const usePermissionsTableColumns = ({
         editable: true,
         width: 200,
         filterable: false,
-        valueGetter: (params) => params.row.subjectId || "",
+        valueGetter: (params) => params.row?.subjectId,
+        valueSetter: (params) => ({
+          ...params.row,
+          subjectId: params.value,
+        }),
       },
       {
         field: "fields",
