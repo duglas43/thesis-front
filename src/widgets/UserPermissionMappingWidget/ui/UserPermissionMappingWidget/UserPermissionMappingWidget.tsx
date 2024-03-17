@@ -1,42 +1,41 @@
 import React, { FC } from "react";
 import { Box, BoxProps } from "@mui/material";
+import { GridInputRowSelectionModel } from "@mui/x-data-grid";
 import {
   ACTIONS,
   PermissionsTable,
-  permissionApi,
   usePermissionsControllerCreateMutation,
 } from "@src/entities/permissions";
 import {
-  useRolesControllerFindPermissionsQuery,
-  useRolesControllerAddPermissionsMutation,
+  useUsersControllerFindPermissionsQuery,
+  useUsersControllerAddPermissionsMutation,
 } from "@src/entities/permissions";
 import { containerSx, tableContainerSx } from "@src/app/styles";
-import { RolesTable } from "@src/entities/roles";
+import { UsersTable } from "@src/entities/users";
 import { TagsTableProps } from "@src/shared/ui";
 import { skipToken } from "@reduxjs/toolkit/query";
 
-export interface RolesPermissionMappingWidgetProps extends BoxProps {}
-export const RolesPermissionMappingWidget: FC<
-  RolesPermissionMappingWidgetProps
+export interface UsersPermissionMappingWidgetProps extends BoxProps {}
+export const UsersPermissionMappingWidget: FC<
+  UsersPermissionMappingWidgetProps
 > = (props) => {
-  const [rolesSeletedIds, setRolesSeletedIds] = React.useState<
-    TagsTableProps["selectedIds"]
-  >([]);
+  const [selectionModel, setSelectionModel] =
+    React.useState<GridInputRowSelectionModel>([]);
   const [createPermission, { isLoading: isCreatingPermission }] =
     usePermissionsControllerCreateMutation();
-  const [rolesAddPermissions, { isLoading: isRolesAddPermissions }] =
-    useRolesControllerAddPermissionsMutation();
+  const [usersAddPermissions, { isLoading: isUsersAddPermissions }] =
+    useUsersControllerAddPermissionsMutation();
 
   const {
     data: rolePermissions,
     isFetching: isRolePermissionsFetching,
     refetch,
-  } = useRolesControllerFindPermissionsQuery(
-    rolesSeletedIds[0] ? { id: rolesSeletedIds[0] } : skipToken
+  } = useUsersControllerFindPermissionsQuery(
+    selectionModel ? { id: Number(selectionModel) } : skipToken
   );
 
   const handleRoleAddPermission = async () => {
-    if (rolesSeletedIds.length === 0) return;
+    if (!selectionModel) return;
     const newPermission = await createPermission({
       createPermissionDto: {
         modality: true,
@@ -44,9 +43,9 @@ export const RolesPermissionMappingWidget: FC<
         subjectId: 1,
       },
     }).unwrap();
-    await rolesAddPermissions({
-      id: Number(rolesSeletedIds[0]),
-      body: { permissionsId: [Number(newPermission.id)] },
+    await usersAddPermissions({
+      id: Number(selectionModel),
+      body: { permissionIds: [Number(newPermission.id)] },
     });
     await refetch();
     return newPermission;
@@ -55,20 +54,20 @@ export const RolesPermissionMappingWidget: FC<
   return (
     <Box display="flex" gap={2} flexDirection="column" {...props}>
       <Box sx={{ ...containerSx, ...tableContainerSx }}>
-        <RolesTable
-          selectedIds={rolesSeletedIds}
-          onTagSelectionChange={setRolesSeletedIds}
-          hideToolbar={true}
-          listProps={{
-            sx: { mt: 1 },
-          }}
+        <UsersTable
+          rowSelectionModel={selectionModel}
+          onRowSelectionModelChange={setSelectionModel}
         />
       </Box>
       <Box sx={{ ...containerSx, ...tableContainerSx }}>
         <PermissionsTable
           rows={rolePermissions || []}
+          loading={
+            isRolePermissionsFetching ||
+            isCreatingPermission ||
+            isUsersAddPermissions
+          }
           autoHeight
-          loading={isRolePermissionsFetching}
           slotProps={{
             toolbar: {
               onAddClick: handleRoleAddPermission,
