@@ -1,8 +1,8 @@
 import { emptySplitApi as api } from "./emptyApi";
-export const addTagTypesSubjects = ["subjects"] as const;
+export const addTagTypesSubject = ["subjects"] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
-    addTagTypes: addTagTypesSubjects,
+    addTagTypes: addTagTypesSubject,
   })
   .injectEndpoints({
     endpoints: (build) => ({

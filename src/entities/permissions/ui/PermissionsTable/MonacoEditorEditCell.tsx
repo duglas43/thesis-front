@@ -6,7 +6,6 @@ import { diagnosticsOptions } from "./monacoSettings";
 export interface MonacoEditorEditCellProps extends GridRenderCellParams {}
 export const MonacoEditorEditCell: FC<MonacoEditorEditCellProps> = (props) => {
   const monaco = useMonaco();
-
   React.useEffect(() => {
     if (!monaco) {
       return;
@@ -15,6 +14,7 @@ export const MonacoEditorEditCell: FC<MonacoEditorEditCellProps> = (props) => {
       diagnosticsOptions
     );
   }, [monaco]);
+
   if (!monaco) {
     return null;
   }
@@ -23,7 +23,7 @@ export const MonacoEditorEditCell: FC<MonacoEditorEditCellProps> = (props) => {
     <Editor
       height="100px"
       width="100%"
-      defaultValue={JSON.stringify(props.value, null, 2) || "{}"}
+      defaultValue={props.value || "{}"}
       defaultLanguage="json"
       options={{
         minimap: { enabled: false },
@@ -34,11 +34,15 @@ export const MonacoEditorEditCell: FC<MonacoEditorEditCellProps> = (props) => {
         autoIndent: "full",
       }}
       onChange={(value) => {
-        props.api.setEditCellValue({
-          id: props.id,
-          field: props.field,
-          value,
-        });
+        try {
+          const parsedValue = JSON.parse(value || "{}");
+          const stringifiedValue = JSON.stringify(parsedValue);
+          props.api.setEditCellValue({
+            id: props.id,
+            field: props.field,
+            value: stringifiedValue,
+          });
+        } catch (error) {}
       }}
     />
   );

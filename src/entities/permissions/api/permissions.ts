@@ -3,7 +3,6 @@ export const addTagTypes = [
   "users",
   "roles",
   "permission-fields",
-  "permission-conditions",
   "permission",
 ] as const;
 const injectedRtkApi = api
@@ -115,52 +114,6 @@ const injectedRtkApi = api
           method: "DELETE",
         }),
         invalidatesTags: ["permission-fields"],
-      }),
-      permissionConditionsControllerCreate: build.mutation<
-        PermissionConditionsControllerCreateApiResponse,
-        PermissionConditionsControllerCreateApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/permission-conditions`,
-          method: "POST",
-          body: queryArg.createPermissionConditionDto,
-        }),
-        invalidatesTags: ["permission-conditions"],
-      }),
-      permissionConditionsControllerFindAll: build.query<
-        PermissionConditionsControllerFindAllApiResponse,
-        PermissionConditionsControllerFindAllApiArg
-      >({
-        query: () => ({ url: `/permission-conditions` }),
-        providesTags: ["permission-conditions"],
-      }),
-      permissionConditionsControllerFindOne: build.query<
-        PermissionConditionsControllerFindOneApiResponse,
-        PermissionConditionsControllerFindOneApiArg
-      >({
-        query: (queryArg) => ({ url: `/permission-conditions/${queryArg.id}` }),
-        providesTags: ["permission-conditions"],
-      }),
-      permissionConditionsControllerUpdate: build.mutation<
-        PermissionConditionsControllerUpdateApiResponse,
-        PermissionConditionsControllerUpdateApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/permission-conditions/${queryArg.id}`,
-          method: "PATCH",
-          body: queryArg.updatePermissionConditionDto,
-        }),
-        invalidatesTags: ["permission-conditions"],
-      }),
-      permissionConditionsControllerRemove: build.mutation<
-        PermissionConditionsControllerRemoveApiResponse,
-        PermissionConditionsControllerRemoveApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/permission-conditions/${queryArg.id}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["permission-conditions"],
       }),
       permissionsControllerCreate: build.mutation<
         PermissionsControllerCreateApiResponse,
@@ -278,30 +231,6 @@ export type PermissionFieldsControllerRemoveApiResponse =
 export type PermissionFieldsControllerRemoveApiArg = {
   id: number;
 };
-export type PermissionConditionsControllerCreateApiResponse =
-  /** status 201  */ PermissionConditionDto;
-export type PermissionConditionsControllerCreateApiArg = {
-  createPermissionConditionDto: CreatePermissionConditionDto;
-};
-export type PermissionConditionsControllerFindAllApiResponse =
-  /** status 200  */ PermissionConditionDto[];
-export type PermissionConditionsControllerFindAllApiArg = void;
-export type PermissionConditionsControllerFindOneApiResponse =
-  /** status 200  */ PermissionConditionDto;
-export type PermissionConditionsControllerFindOneApiArg = {
-  id: number;
-};
-export type PermissionConditionsControllerUpdateApiResponse =
-  /** status 200  */ PermissionConditionDto;
-export type PermissionConditionsControllerUpdateApiArg = {
-  id: number;
-  updatePermissionConditionDto: UpdatePermissionConditionDto;
-};
-export type PermissionConditionsControllerRemoveApiResponse =
-  /** status 200  */ PermissionConditionDto;
-export type PermissionConditionsControllerRemoveApiArg = {
-  id: number;
-};
 export type PermissionsControllerCreateApiResponse =
   /** status 201  */ PermissionDto;
 export type PermissionsControllerCreateApiArg = {
@@ -333,21 +262,13 @@ export type PermissionFieldDto = {
   createdAt: string;
   updatedAt: string;
 };
-export type PermissionConditionDto = {
-  id: string;
-  permissionId: string;
-  key: string;
-  value: string;
-  createdAt: string;
-  updatedAt: string;
-};
 export type PermissionDto = {
   id: string;
   subjectId: string;
   modality: boolean;
   action: ACTIONS;
   fields: PermissionFieldDto[];
-  conditions: PermissionConditionDto[];
+  condition: string;
   reason: string | null;
   createdAt: string;
   updatedAt: string | null;
@@ -360,35 +281,23 @@ export type UpdatePermissionFieldDto = {
   permissionId: number;
   name: string;
 };
-export type CreatePermissionConditionDto = {
-  permissionId: number;
-  key: string;
-  value: string;
-};
-export type UpdatePermissionConditionDto = {
-  permissionId: number;
-  key: string;
-  value: string;
-};
 export type PermissionField = {
   name: string;
-};
-export type PermissionCondition = {
-  key: string;
-  value: string;
 };
 export type CreatePermissionDto = {
   subjectId: number;
   modality?: boolean;
   fields?: PermissionField[];
-  conditions?: PermissionCondition[];
+  condition?: string;
   reason?: string;
   action: ACTIONS;
 };
 export type UpdatePermissionDto = {
-  subjectId: number;
-  modality: boolean;
-  action: ACTIONS;
+  subjectId?: number;
+  modality?: boolean;
+  action?: ACTIONS;
+  reason?: string;
+  condition?: string;
 };
 export enum ACTIONS {
   Manage = "manage",
@@ -413,13 +322,6 @@ export const {
   useLazyPermissionFieldsControllerFindOneQuery,
   usePermissionFieldsControllerUpdateMutation,
   usePermissionFieldsControllerRemoveMutation,
-  usePermissionConditionsControllerCreateMutation,
-  usePermissionConditionsControllerFindAllQuery,
-  useLazyPermissionConditionsControllerFindAllQuery,
-  usePermissionConditionsControllerFindOneQuery,
-  useLazyPermissionConditionsControllerFindOneQuery,
-  usePermissionConditionsControllerUpdateMutation,
-  usePermissionConditionsControllerRemoveMutation,
   usePermissionsControllerCreateMutation,
   usePermissionsControllerFindAllQuery,
   useLazyPermissionsControllerFindAllQuery,

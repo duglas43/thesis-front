@@ -5,8 +5,6 @@ import {
   usePermissionsControllerFindAllQuery,
   usePermissionsControllerCreateMutation,
   usePermissionsControllerRemoveMutation,
-  usePermissionConditionsControllerCreateMutation,
-  usePermissionConditionsControllerRemoveMutation,
   usePermissionFieldsControllerCreateMutation,
   usePermissionFieldsControllerRemoveMutation,
   usePermissionsControllerUpdateMutation,
@@ -40,10 +38,6 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
     usePermissionsControllerUpdateMutation();
   const [deletePermission, { isLoading: isDeleting }] =
     usePermissionsControllerRemoveMutation();
-  const [createPermissionCondition, { isLoading: isCreatingCondition }] =
-    usePermissionConditionsControllerCreateMutation();
-  const [deletePermissionCondition, { isLoading: isDeletingCondition }] =
-    usePermissionConditionsControllerRemoveMutation();
   const [createPermissionField, { isLoading: isCreatingField }] =
     usePermissionFieldsControllerCreateMutation();
   const [deletePermissionField, { isLoading: isDeletingField }] =
@@ -101,6 +95,7 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
         modality: newRow.modality,
         action: newRow.action,
         subjectId: Number(newRow.subjectId),
+        condition: newRow.condition,
       },
     });
     const fieldsToAdd = newRow.fields.filter((field) => !field.id);
@@ -109,18 +104,6 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
         oldField.id &&
         !newRow.fields.some((newField) => newField.id === oldField.id)
     );
-
-    const conditionsToAdd = newRow.conditions.filter(
-      (condition) => !condition.id
-    );
-    const conditionsToRemove = oldRow.conditions.filter(
-      (oldCondition) =>
-        oldCondition.id &&
-        !newRow.conditions.some(
-          (newCondition) => newCondition.id === oldCondition.id
-        )
-    );
-
     await Promise.all([
       ...fieldsToAdd.map((field) =>
         createPermissionField({
@@ -133,20 +116,7 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
       ...fieldsToRemove.map((field) =>
         deletePermissionField({ id: Number(field.id) })
       ),
-      ...conditionsToAdd.map((condition) =>
-        createPermissionCondition({
-          createPermissionConditionDto: {
-            permissionId: Number(newRow.id),
-            key: condition.key,
-            value: condition.value,
-          },
-        })
-      ),
-      ...conditionsToRemove.map((condition) =>
-        deletePermissionCondition({ id: Number(condition.id) })
-      ),
     ]);
-
     await refetch();
     return newRow;
   };
@@ -188,8 +158,6 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
           isCreating ||
           isDeleting ||
           isUpdating ||
-          isCreatingCondition ||
-          isDeletingCondition ||
           isCreatingField ||
           isDeletingField ||
           !!props.loading

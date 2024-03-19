@@ -255,21 +255,13 @@ export type PermissionFieldDto = {
   createdAt: string;
   updatedAt: string;
 };
-export type PermissionConditionDto = {
-  id: string;
-  permissionId: string;
-  key: string;
-  value: string;
-  createdAt: string;
-  updatedAt: string;
-};
 export type PermissionDto = {
   id: string;
   subjectId: string;
   modality: boolean;
   action: ACTIONS;
   fields: PermissionFieldDto[];
-  conditions: PermissionConditionDto[];
+  condition: string;
   reason: string | null;
   createdAt: string;
   updatedAt: string | null;

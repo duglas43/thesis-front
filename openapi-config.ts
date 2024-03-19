@@ -44,17 +44,13 @@ const config: ConfigFile = {
       filterEndpoints: [/orders/i],
       exportName: "ordersApi",
     },
-    "./src/entities/permissions/api/permission-fields.ts": {
-      filterEndpoints: [/permission-fields/i],
-      exportName: "permissionFieldsApi",
-    },
-    "./src/entities/permissions/api/permission-conditions.ts": {
-      filterEndpoints: [/permission-conditions/i],
-      exportName: "permissionConditionsApi",
-    },
     "./src/entities/permissions/api/permissions.ts": {
       filterEndpoints: [/permission/i],
       exportName: "permissionApi",
+    },
+    "./src/entities/permissions/api/permission-fields.ts": {
+      filterEndpoints: [/permission-fields/i],
+      exportName: "permissionFieldsApi",
     },
     "./src/shared/api/subjects.ts": {
       filterEndpoints: [/subjects/i],

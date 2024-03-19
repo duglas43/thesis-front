@@ -11,11 +11,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { useTranslation } from "react-i18next";
 import { SubjectDto } from "@src/shared/api";
-import {
-  PermissionDto,
-  ACTIONS,
-  PermissionConditionDto,
-} from "@entities/permissions";
+import { PermissionDto, ACTIONS } from "@entities/permissions";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TagCell } from "@src/shared/ui";
 import { PermissionTableFieldCell } from "./FieldCell";
@@ -107,36 +103,14 @@ export const usePermissionsTableColumns = ({
         renderEditCell: (params) => <TagCell {...params} />,
       },
       {
-        field: "conditions",
+        field: "condition",
         sortable: false,
-        headerName: t("conditions"),
+        headerName: t("condition"),
         flex: 0.5,
         minWidth: 200,
         editable: true,
         filterable: false,
         cellClassName: "wrap-text",
-        valueGetter: (params) =>
-          params.value.reduce(
-            (acc: any, condition: PermissionConditionDto) => ({
-              ...acc,
-              [condition.key]: condition.value,
-            }),
-            {}
-          ),
-        valueSetter: (params) => {
-          try {
-            const parsedJson = JSON.parse(params.value);
-            return {
-              ...params.row,
-              conditions: Object.entries(parsedJson).map(
-                ([key, value]) => ({ key, value } as PermissionConditionDto)
-              ),
-            };
-          } catch (e) {
-            return params.row;
-          }
-        },
-        valueFormatter: (params) => JSON.stringify(params.value, null, 2),
         renderEditCell: (params) => <MonacoEditorEditCell {...params} />,
       },
       {
