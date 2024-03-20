@@ -73,5 +73,6 @@
   "addPermission": "Add permission",
   "addConditions": "Add conditions",
   "conditions": "Conditions",
-  "condition": "Condition"
+  "condition": "Condition",
+  "reason": "Reason"
 }

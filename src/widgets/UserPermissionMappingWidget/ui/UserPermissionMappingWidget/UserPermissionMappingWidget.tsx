@@ -30,9 +30,10 @@ export const UsersPermissionMappingWidget: FC<
     isFetching: isUserPermissionsFetching,
     refetch,
   } = useUsersControllerFindPermissionsQuery(
-    selectionModel ? { id: Number(selectionModel) } : skipToken
+    selectionModel && Number(selectionModel) !== 0
+      ? { id: Number(selectionModel) }
+      : skipToken
   );
-
   const handleUserAddPermission = async () => {
     if (!selectionModel) return;
     const newPermission = await createPermission({

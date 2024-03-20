@@ -96,6 +96,7 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
         action: newRow.action,
         subjectId: Number(newRow.subjectId),
         condition: newRow.condition,
+        reason: newRow?.reason || undefined,
       },
     });
     const fieldsToAdd = newRow.fields.filter((field) => !field.id);
