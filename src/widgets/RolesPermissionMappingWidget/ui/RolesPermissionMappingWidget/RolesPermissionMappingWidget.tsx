@@ -47,8 +47,8 @@ export const RolesPermissionMappingWidget: FC<
     await rolesAddPermissions({
       id: Number(rolesSeletedIds[0]),
       body: { permissionsId: [Number(newPermission.id)] },
-    });
-    await refetch();
+    }).unwrap();
+    await refetch().unwrap();
     return newPermission;
   };
 
@@ -68,7 +68,11 @@ export const RolesPermissionMappingWidget: FC<
         <PermissionsTable
           rows={rolePermissions || []}
           autoHeight
-          loading={isRolePermissionsFetching}
+          loading={
+            isRolePermissionsFetching ||
+            isCreatingPermission ||
+            isRolesAddPermissions
+          }
           slotProps={{
             toolbar: {
               onAddClick: handleRoleAddPermission,

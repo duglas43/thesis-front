@@ -12,7 +12,6 @@ import {
 } from "@src/entities/permissions";
 import { containerSx, tableContainerSx } from "@src/app/styles";
 import { UsersTable } from "@src/entities/users";
-import { TagsTableProps } from "@src/shared/ui";
 import { skipToken } from "@reduxjs/toolkit/query";
 
 export interface UsersPermissionMappingWidgetProps extends BoxProps {}
@@ -27,14 +26,14 @@ export const UsersPermissionMappingWidget: FC<
     useUsersControllerAddPermissionsMutation();
 
   const {
-    data: rolePermissions,
-    isFetching: isRolePermissionsFetching,
+    data: userPermissions,
+    isFetching: isUserPermissionsFetching,
     refetch,
   } = useUsersControllerFindPermissionsQuery(
     selectionModel ? { id: Number(selectionModel) } : skipToken
   );
 
-  const handleRoleAddPermission = async () => {
+  const handleUserAddPermission = async () => {
     if (!selectionModel) return;
     const newPermission = await createPermission({
       createPermissionDto: {
@@ -47,7 +46,7 @@ export const UsersPermissionMappingWidget: FC<
       id: Number(selectionModel),
       body: { permissionIds: [Number(newPermission.id)] },
     });
-    await refetch();
+    await refetch().unwrap();
     return newPermission;
   };
 
@@ -61,16 +60,16 @@ export const UsersPermissionMappingWidget: FC<
       </Box>
       <Box sx={{ ...containerSx, ...tableContainerSx }}>
         <PermissionsTable
-          rows={rolePermissions || []}
+          rows={userPermissions || []}
           loading={
-            isRolePermissionsFetching ||
+            isUserPermissionsFetching ||
             isCreatingPermission ||
             isUsersAddPermissions
           }
           autoHeight
           slotProps={{
             toolbar: {
-              onAddClick: handleRoleAddPermission,
+              onAddClick: handleUserAddPermission,
             },
           }}
         />

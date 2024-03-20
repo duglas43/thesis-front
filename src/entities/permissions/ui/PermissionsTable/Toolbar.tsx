@@ -22,6 +22,7 @@ export const PermissionTableToolbar: FC<PermissionTableToolbarProps> =
   React.memo(({ onAddClick, setRowModesModel }) => {
     const handleClick = async () => {
       const newPermission = await onAddClick();
+      await new Promise((resolve) => setTimeout(resolve, 100));
       setRowModesModel((oldModel) => ({
         ...oldModel,
         [newPermission.id]: {

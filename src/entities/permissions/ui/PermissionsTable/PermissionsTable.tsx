@@ -104,19 +104,17 @@ export const PermissionsTable: FC<Partial<DataGridProps>> = (props) => {
         oldField.id &&
         !newRow.fields.some((newField) => newField.id === oldField.id)
     );
-    await Promise.all([
-      ...fieldsToAdd.map((field) =>
-        createPermissionField({
-          createPermissionFieldDto: {
-            permissionId: Number(newRow.id),
-            name: field.name,
-          },
-        })
-      ),
-      ...fieldsToRemove.map((field) =>
-        deletePermissionField({ id: Number(field.id) })
-      ),
-    ]);
+    for (let field of fieldsToAdd) {
+      await createPermissionField({
+        createPermissionFieldDto: {
+          permissionId: Number(newRow.id),
+          name: field.name,
+        },
+      });
+    }
+    for (let field of fieldsToRemove) {
+      await deletePermissionField({ id: Number(field.id) });
+    }
     await refetch();
     return newRow;
   };

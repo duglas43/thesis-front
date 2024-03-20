@@ -18,5 +18,10 @@ export const errorThunkMiddleware =
         variant: "error",
       });
     }
+    if (action.payload?.message) {
+      enqueueSnackbar(action.payload.message, {
+        variant: "warning",
+      });
+    }
     return next(action);
   };
