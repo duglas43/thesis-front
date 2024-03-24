@@ -43,7 +43,12 @@ export const UserUpdateForm: FC<UserUpdateFormProps> = ({
     initialValues: formikInitailValues,
     validationSchema,
     enableReinitialize: true,
-    onSubmit: (values) => {
+    onSubmit: (values: any) => {
+      Object.keys(values).forEach((key: any) => {
+        if (values[key] === "") {
+          values[key] = null;
+        }
+      });
       onSubmit(values);
     },
   });
