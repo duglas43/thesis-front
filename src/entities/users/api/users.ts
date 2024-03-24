@@ -206,6 +206,7 @@ export type UserDto = {
   lastName?: string | null;
   patronymic?: string | null;
   language: LANGUAGES;
+  officeId: number | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -216,6 +217,7 @@ export type CreateUserDto = {
   lastName?: string;
   patronymic?: string;
   language?: LANGUAGES;
+  officeId?: number;
   roleIds?: string[];
 };
 export type MetaDto = {
@@ -233,6 +235,7 @@ export type UpdateUserDto = {
   lastName?: string;
   patronymic?: string;
   language?: LANGUAGES;
+  officeId?: number;
   roleIds?: string[];
 };
 export type RoleDto = {

@@ -228,6 +228,7 @@ export type UserDto = {
   lastName?: string | null;
   patronymic?: string | null;
   language: LANGUAGES;
+  officeId: number | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -274,6 +275,7 @@ export enum LANGUAGES {
   Es = "es",
   Tr = "tr",
   Nl = "nl",
+  Ru = "ru",
 }
 export enum ORDER {
   Asc = "ASC",

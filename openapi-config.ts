@@ -60,6 +60,10 @@ const config: ConfigFile = {
       filterEndpoints: [/pages/i],
       exportName: "pagesApi",
     },
+    "./src/entities/offices/api/offices.ts": {
+      filterEndpoints: [/offices/i],
+      exportName: "officesApi",
+    },
   },
 };
 

@@ -1,12 +1,11 @@
 import React, { FC } from "react";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { getNumericEnumValues } from "@shared/types";
-import { ROLES_IDS } from "@entities/roles";
 import { LANGUAGES } from "@entities/users";
 import { UserDto, UpdateUserDto } from "@entities/users";
 import { TextField, Button, Box, MenuItem } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useOfficesControllerFindAllQuery } from "@src/entities/offices";
 
 export interface UserUpdateFormProps {
   initialValues: UserDto;
@@ -17,6 +16,7 @@ export const UserUpdateForm: FC<UserUpdateFormProps> = ({
   initialValues,
 }) => {
   const { t } = useTranslation();
+  const { data: offices } = useOfficesControllerFindAllQuery({});
   const validationSchema = yup.object().shape({
     firstName: yup.string().nullable(),
     lastName: yup.string().nullable(),
@@ -27,6 +27,7 @@ export const UserUpdateForm: FC<UserUpdateFormProps> = ({
       .string()
       .matches(/^\+7\d{10}$/, t("phoneInvalid"))
       .nullable(),
+    office: yup.string(),
   });
   console.log(initialValues);
 
@@ -36,6 +37,7 @@ export const UserUpdateForm: FC<UserUpdateFormProps> = ({
     lastName: initialValues.lastName || "",
     patronymic: initialValues.patronymic || "",
     language: initialValues.language || "",
+    officeId: (initialValues?.officeId as any) || "",
   };
   const formik = useFormik({
     initialValues: formikInitailValues,
@@ -125,6 +127,27 @@ export const UserUpdateForm: FC<UserUpdateFormProps> = ({
         {Object.values(LANGUAGES).map((language) => (
           <MenuItem key={language} value={language}>
             {t(language)}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        fullWidth
+        id="officeId"
+        label={t("office")}
+        select
+        size="small"
+        {...formik.getFieldProps("officeId")}
+        error={formik.touched.officeId && !!formik.errors.officeId}
+        helperText={
+          formik.touched.officeId &&
+          formik.errors.officeId &&
+          formik.errors.officeId
+        }
+      >
+        {offices?.map((office) => (
+          <MenuItem key={office.id} value={office.id}>
+            {office.name}
           </MenuItem>
         ))}
       </TextField>
