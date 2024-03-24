@@ -98,12 +98,14 @@ export type MachineDto = {
   id: number;
   name: string;
   partNumber: string;
+  price: number | null;
   createdAt: string;
   updatedAt: string;
 };
 export type CreateMachineDto = {
   name: string;
   partNumber?: string;
+  price?: number;
 };
 export type MetaDto = {
   totalCount: number;
@@ -117,6 +119,7 @@ export type MetaDto = {
 export type UpdateMachineDto = {
   name?: string;
   partNumber?: string;
+  price?: number;
 };
 export enum ORDER {
   Asc = "ASC",

@@ -27,6 +27,13 @@ export const useMachinesTableColumns = ({
         filterable: false,
       },
       {
+        field: "price",
+        headerName: t("price"),
+        flex: 0.3,
+        minWidth: 150,
+        filterable: false,
+      },
+      {
         field: "createdAt",
         headerName: t("createdAt"),
         flex: 0.2,

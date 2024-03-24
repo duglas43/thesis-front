@@ -20,16 +20,18 @@ export const MachineEditForm: FC<MachineEditFormProps> = ({
   const validationSchema = yup.object().shape({
     name: yup.string().required(t("nameIsRequired") || "nameIsRequired"),
     partNumber: yup.string(),
+    price: yup.number(),
   });
 
   const formik = useFormik({
     initialValues: initialValues || {
       name: "",
       partNumber: "",
+      price: 0,
     },
     validationSchema,
     enableReinitialize: true,
-    onSubmit: (values) => {
+    onSubmit: (values: any) => {
       if (!initialValues?.id) {
         return;
       }
@@ -84,6 +86,22 @@ export const MachineEditForm: FC<MachineEditFormProps> = ({
         error={!!formik.touched.partNumber && !!formik.errors.partNumber}
         helperText={formik.touched.partNumber && formik.errors.partNumber}
       />
+
+      <TextField
+        fullWidth
+        id="price"
+        name="price"
+        label={t("price")}
+        type="number"
+        size="small"
+        disabled={!initialValues?.id}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.price}
+        error={!!formik.touched.price && !!formik.errors.price}
+        helperText={formik.touched.price && formik.errors.price}
+      />
+
       <Button
         fullWidth
         type="submit"
