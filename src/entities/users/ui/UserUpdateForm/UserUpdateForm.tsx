@@ -17,66 +17,35 @@ export const UserUpdateForm: FC<UserUpdateFormProps> = ({
   initialValues,
 }) => {
   const { t } = useTranslation();
-  const [changePassword, setChangePassword] = React.useState(false);
   const validationSchema = yup.object().shape({
-    login: yup.string().required(t("loginIsRequired")).nullable(),
-    password: yup.string().test({
-      name: "password",
-      message: t("passwordIsRequired"),
-      test: (value) => {
-        if (!changePassword) return true;
-        return !!value && value.length > 0;
-      },
-    }),
     firstName: yup.string().nullable(),
     lastName: yup.string().nullable(),
     patronymic: yup.string().nullable(),
-    language: yup
-      .string()
-      .oneOf(getNumericEnumValues(LANGUAGES).map(String))
-      .nullable(),
+    language: yup.string().oneOf(Object.values(LANGUAGES)).nullable(),
     email: yup.string().email(t("emailIsRequired")).nullable(),
     phone: yup
       .string()
       .matches(/^\+7\d{10}$/, t("phoneInvalid"))
       .nullable(),
-    roleId: yup
-      .number()
-      .oneOf(getNumericEnumValues(ROLES_IDS))
-      .test({
-        name: "roleId",
-        message: t("roleIsRequired"),
-        test: (value) => {
-          return !!value && getNumericEnumValues(ROLES_IDS).includes(value);
-        },
-      }),
-    confirm: yup.string().test({
-      name: "confirm",
-      message: t("passwordsMustMatch"),
-      test: function (value) {
-        if (!changePassword) return true;
-        return this.parent.password === value;
-      },
-    }),
   });
+  console.log(initialValues);
 
-  const formikInitailValues: UpdateUserDto & { confirm: string } = {
+  const formikInitailValues: UpdateUserDto = {
     email: initialValues.email,
     firstName: initialValues.firstName || "",
     lastName: initialValues.lastName || "",
     patronymic: initialValues.patronymic || "",
-    language: initialValues.language,
-    confirm: "",
+    language: initialValues.language || "",
   };
   const formik = useFormik({
     initialValues: formikInitailValues,
     validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      const { confirm, ...rest } = values;
-      onSubmit(rest);
+      onSubmit(values);
     },
   });
+  console.log(formik.values, formik.errors, formik.touched);
   return (
     <Box
       component="form"
@@ -84,6 +53,19 @@ export const UserUpdateForm: FC<UserUpdateFormProps> = ({
       onSubmit={formik.handleSubmit}
       noValidate
     >
+      <TextField
+        fullWidth
+        id="email"
+        label={t("email")}
+        type="email"
+        size="small"
+        {...formik.getFieldProps("email")}
+        error={formik.touched.email && !!formik.errors.email}
+        helperText={
+          formik.touched.email && formik.errors.email && formik.errors.email
+        }
+      />
+
       <TextField
         fullWidth
         id="firstName"
@@ -146,32 +128,6 @@ export const UserUpdateForm: FC<UserUpdateFormProps> = ({
           </MenuItem>
         ))}
       </TextField>
-
-      <TextField
-        fullWidth
-        id="email"
-        label={t("email")}
-        type="email"
-        size="small"
-        {...formik.getFieldProps("email")}
-        error={formik.touched.email && !!formik.errors.email}
-        helperText={
-          formik.touched.email && formik.errors.email && formik.errors.email
-        }
-      />
-
-      <TextField
-        fullWidth
-        id="email"
-        label={t("email")}
-        type="text"
-        size="small"
-        {...formik.getFieldProps("email")}
-        error={formik.touched.email && !!formik.errors.email}
-        helperText={
-          formik.touched.email && formik.errors.email && formik.errors.email
-        }
-      />
 
       <Button fullWidth type="submit" variant="contained">
         Submit

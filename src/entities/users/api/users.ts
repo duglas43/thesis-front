@@ -268,6 +268,7 @@ export enum LANGUAGES {
   Es = "es",
   Tr = "tr",
   Nl = "nl",
+  Ru = "ru",
 }
 export enum ORDER {
   Asc = "ASC",

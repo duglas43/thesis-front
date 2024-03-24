@@ -74,5 +74,14 @@
   "addConditions": "Add conditions",
   "conditions": "Conditions",
   "condition": "Condition",
-  "reason": "Reason"
+  "reason": "Reason",
+  "ru": "Russian",
+  "en": "English",
+  "de": "German",
+  "fr": "French",
+  "it": "Italian",
+  "nl": "Dutch",
+  "tr": "Turkish",
+  "es": "Spanish",
+  "role": "Role"
 }
