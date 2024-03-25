@@ -40,11 +40,18 @@ const injectedRtkApi = api
         query: () => ({ url: `/users/me` }),
         providesTags: ["users"],
       }),
+      usersControllerFindMeAbilityRules: build.query<
+        UsersControllerFindMeAbilityRulesApiResponse,
+        UsersControllerFindMeAbilityRulesApiArg
+      >({
+        query: () => ({ url: `/users/me/ability/rules` }),
+        providesTags: ["users"],
+      }),
       usersControllerFindOne: build.query<
         UsersControllerFindOneApiResponse,
         UsersControllerFindOneApiArg
       >({
-        query: (queryArg) => ({ url: `/users/${queryArg.id}` }),
+        query: (queryArg) => ({ url: `/users/me/permissions-rules` }),
         providesTags: ["users"],
       }),
       usersControllerUpdate: build.mutation<
@@ -147,7 +154,11 @@ export type UsersControllerFindAllApiArg = {
 };
 export type UsersControllerFindMeApiResponse = /** status 200  */ UserDto;
 export type UsersControllerFindMeApiArg = void;
-export type UsersControllerFindOneApiResponse = /** status 200  */ UserDto;
+export type UsersControllerFindMeAbilityRulesApiResponse =
+  /** status 200  */ AbilityRuleDto[];
+export type UsersControllerFindMeAbilityRulesApiArg = void;
+export type UsersControllerFindOneApiResponse =
+  /** status 200  */ PermissionDto[];
 export type UsersControllerFindOneApiArg = {
   id: number;
 };
@@ -229,21 +240,13 @@ export type MetaDto = {
   order: ORDER;
   sort: string;
 };
-export type UpdateUserDto = {
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  patronymic?: string;
-  language?: LANGUAGES;
-  officeId?: number;
-  roleIds?: string[];
-};
-export type RoleDto = {
-  id: number;
-  name: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
+export type AbilityRuleDto = {
+  action: ACTIONS;
+  inverted: boolean;
+  subject: string;
+  fields: string[];
+  conditions: object;
+  reason: string;
 };
 export type PermissionFieldDto = {
   id: string;
@@ -262,6 +265,22 @@ export type PermissionDto = {
   reason: string | null;
   createdAt: string;
   updatedAt: string | null;
+};
+export type UpdateUserDto = {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  patronymic?: string;
+  language?: LANGUAGES;
+  officeId?: number;
+  roleIds?: string[];
+};
+export type RoleDto = {
+  id: number;
+  name: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
 };
 export enum LANGUAGES {
   En = "en",
@@ -290,6 +309,8 @@ export const {
   useLazyUsersControllerFindAllQuery,
   useUsersControllerFindMeQuery,
   useLazyUsersControllerFindMeQuery,
+  useUsersControllerFindMeAbilityRulesQuery,
+  useLazyUsersControllerFindMeAbilityRulesQuery,
   useUsersControllerFindOneQuery,
   useLazyUsersControllerFindOneQuery,
   useUsersControllerUpdateMutation,

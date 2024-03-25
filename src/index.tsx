@@ -9,6 +9,7 @@ import { SnackbarProvider } from "notistack";
 import { store } from "./app/store";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./app/styles";
+import { AbilityContext, ability } from "./entities/casl";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,7 +21,9 @@ root.render(
         <Provider store={store}>
           <BrowserRouter>
             <Suspense fallback="">
-              <App />
+              <AbilityContext.Provider value={ability}>
+                <App />
+              </AbilityContext.Provider>
             </Suspense>
           </BrowserRouter>
         </Provider>
