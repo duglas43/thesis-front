@@ -22,6 +22,7 @@ const App: FC = () => {
   const { data: pagesData } = usePagesControllerFindAllQuery({});
   useAbilityListener();
   useLanguageListener();
+  if (!pagesData) return null;
 
   return (
     <>
@@ -30,18 +31,39 @@ const App: FC = () => {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/" element={<AuthProtect />}>
           <Route path="/" element={<AppLayout />}>
-            <Route path="/" element={<UsersPage />} />
-            <Route path="/users" element={<UsersPage />} />
-            <Route path="/users-roles" element={<UserRolesPage />} />
-            <Route
-              path="/roles-permissions"
-              element={<RolesPermissionPage />}
-            />
-            <Route path="/users-permissions" element={<UserPermissionPage />} />
-            <Route path="/roles" element={<RolesPage />} />
-            <Route path="/machines" element={<MachinesPage />} />
-            <Route path="/details" element={<DetailsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            {pagesData.find((page) => page.name === "Users") && (
+              <>
+                <Route path="/" element={<UsersPage />} />
+                <Route path="/users" element={<UsersPage />} />
+              </>
+            )}
+            {pagesData.find((page) => page.name === "Users-Roles") && (
+              <Route path="/users-roles" element={<UserRolesPage />} />
+            )}
+            {pagesData.find((page) => page.name === "Users-Permissions") && (
+              <Route
+                path="/users-permissions"
+                element={<UserPermissionPage />}
+              />
+            )}
+            {pagesData.find((page) => page.name === "Roles") && (
+              <Route path="/roles" element={<RolesPage />} />
+            )}
+            {pagesData.find((page) => page.name === "Roles-Permissions") && (
+              <Route
+                path="/roles-permissions"
+                element={<RolesPermissionPage />}
+              />
+            )}
+            {pagesData.find((page) => page.name === "Machines") && (
+              <Route path="/machines" element={<MachinesPage />} />
+            )}
+            {pagesData.find((page) => page.name === "Details") && (
+              <Route path="/details" element={<DetailsPage />} />
+            )}
+            {pagesData.find((page) => page.name === "Profile") && (
+              <Route path="/profile" element={<ProfilePage />} />
+            )}
             <Route path="/*" element={<NotFoundPage />} />
           </Route>
           <Route path="/*" element={<NotFoundPage />} />
