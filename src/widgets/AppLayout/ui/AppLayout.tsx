@@ -5,16 +5,21 @@ import { Header } from "@widgets/Header";
 import { Outlet, useLocation } from "react-router-dom";
 import { temporaryDrawerSx, permanentDrawerSx, mainSx } from "../styles";
 import { useTranslation } from "react-i18next";
+import { usePagesControllerFindAllQuery } from "@src/shared/api";
 
 export interface AppLayoutProps {}
 export const AppLayout: FC<AppLayoutProps> = () => {
   const location = useLocation();
+  const { data: pages } = usePagesControllerFindAllQuery({});
   const { t } = useTranslation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  const authorizedSidebarSchema = SIDEBAR_SHEMA.filter((item) =>
+    pages?.some((page) => page.name === item.bindedPageName)
+  );
 
   return (
     <>
@@ -24,7 +29,7 @@ export const AppLayout: FC<AppLayoutProps> = () => {
             handleDrawerToggle();
           }}
           text={t(
-            SIDEBAR_SHEMA.find(
+            authorizedSidebarSchema.find(
               (item) => item.link === `/${location.pathname.split("/")[1]}`
             )?.text as any
           )}
@@ -44,11 +49,11 @@ export const AppLayout: FC<AppLayoutProps> = () => {
             sx={temporaryDrawerSx}
           >
             <Toolbar />
-            <Sidebar schema={SIDEBAR_SHEMA} />
+            <Sidebar schema={authorizedSidebarSchema} />
           </Drawer>
           <Drawer variant="permanent" sx={permanentDrawerSx} open>
             <Toolbar />
-            <Sidebar schema={SIDEBAR_SHEMA} />
+            <Sidebar schema={authorizedSidebarSchema} />
           </Drawer>
         </Box>
         <Box component="main" sx={mainSx}>
