@@ -1,6 +1,6 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useLanguageListener } from "@shared/hooks";
+import { useLanguageListener, useAbilityListener } from "@shared/hooks";
 import { useUsersControllerFindMeQuery } from "@entities/users";
 import { usePagesControllerFindAllQuery } from "@shared/api";
 import { AppLayout } from "@widgets/AppLayout";
@@ -16,17 +16,11 @@ import { ProfilePage } from "@src/pages/Profile/ProfilePage";
 import { UserRolesPage } from "@src/pages/UserRoles/UserRolesPage";
 import { RolesPermissionPage } from "@src/pages/RolesPermissions";
 import { UserPermissionPage } from "@src/pages/UserPermissions";
-import { AbilityContext } from "@src/entities/casl";
-import { useUsersControllerFindMeAbilityRulesQuery } from "@entities/users";
 
 const App: FC = () => {
   const { data } = useUsersControllerFindMeQuery();
   const { data: pagesData } = usePagesControllerFindAllQuery({});
-  const { data: abilityRules } = useUsersControllerFindMeAbilityRulesQuery();
-  const ability = useContext(AbilityContext);
-  if (abilityRules) {
-    ability.update(abilityRules);
-  }
+  useAbilityListener();
   useLanguageListener();
 
   return (

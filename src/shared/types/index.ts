@@ -7,3 +7,5 @@ export const getNumericEnumKeys = (enumObject: Record<string, number>) => {
 };
 export * from "./orders.enum";
 export * from "./table";
+export * from "./actions.enum";
+export * from "./subjects.enum";
