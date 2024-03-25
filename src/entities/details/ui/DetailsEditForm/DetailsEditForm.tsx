@@ -4,6 +4,9 @@ import { DetailsControllerUpdateApiArg, DetailDto } from "../../api/details";
 import * as yup from "yup";
 import { TextField, Button, Box, BoxProps } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Can } from "@src/entities/casl";
+import { SUBJECTS, ACTIONS } from "@src/shared/types";
+import { subject as an } from "@casl/ability";
 
 export interface DetailEditFormProps
   extends PickAllExcept<BoxProps, "onSubmit"> {
@@ -53,45 +56,72 @@ export const DetailEditForm: FC<DetailEditFormProps> = ({
       }}
       {...props}
     >
-      <TextField
-        fullWidth
-        id="name"
-        name="name"
-        label={t("name")}
-        type="text"
-        size="small"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.name}
-        disabled={!initialValues?.id}
-        error={formik.touched.name && !!formik.errors.name}
-        helperText={
-          formik.touched.name && formik.errors.name && formik.errors.name
-        }
-      />
-
-      <TextField
-        fullWidth
-        id="partNumber"
-        name="partNumber"
-        label={t("partNumber")}
-        type="partNumber"
-        size="small"
-        disabled={!initialValues?.id}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.partNumber}
-        error={!!formik.touched.partNumber && !!formik.errors.partNumber}
-        helperText={formik.touched.partNumber && formik.errors.partNumber}
-      />
-      <Button
-        fullWidth
-        type="submit"
-        variant="contained"
-        disabled={formik.isSubmitting || !initialValues?.id}
+      <Can
+        I={ACTIONS.UPDATE}
+        this={an(SUBJECTS.DETAIL, { ...initialValues })}
+        field="name"
+        passThrough
       >
-        {t("save")}
-      </Button>
+        {(allowed) => (
+          <TextField
+            fullWidth
+            id="name"
+            name="name"
+            label={t("name")}
+            type="text"
+            size="small"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.name}
+            disabled={!initialValues?.id || !allowed}
+            error={formik.touched.name && !!formik.errors.name}
+            helperText={
+              formik.touched.name && formik.errors.name && formik.errors.name
+            }
+          />
+        )}
+      </Can>
+
+      <Can
+        I={ACTIONS.UPDATE}
+        this={an(SUBJECTS.DETAIL, { ...initialValues })}
+        field="partNumber"
+        passThrough
+      >
+        {(allowed) => (
+          <TextField
+            fullWidth
+            id="partNumber"
+            name="partNumber"
+            label={t("partNumber")}
+            type="partNumber"
+            size="small"
+            disabled={!initialValues?.id || !allowed}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.partNumber}
+            error={!!formik.touched.partNumber && !!formik.errors.partNumber}
+            helperText={formik.touched.partNumber && formik.errors.partNumber}
+          />
+        )}
+      </Can>
+
+      <Can
+        I={ACTIONS.UPDATE}
+        this={an(SUBJECTS.DETAIL, { ...initialValues })}
+        passThrough
+      >
+        {(allowed) => (
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            disabled={formik.isSubmitting || !initialValues?.id || !allowed}
+          >
+            {t("save")}
+          </Button>
+        )}
+      </Can>
     </Box>
   );
 };
