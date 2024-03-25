@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { GridColDef, GridActionsCellItem } from "@mui/x-data-grid";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useTranslation } from "react-i18next";
 import { MachineDto } from "@entities/machines";
+import { AbilityContext } from "@src/entities/casl";
+import { SUBJECTS, ACTIONS } from "@src/shared/types";
 export interface useMachinesTableColumnsProps {
   onDelete: (id: number) => any;
 }
@@ -10,6 +12,7 @@ export const useMachinesTableColumns = ({
   onDelete,
 }: useMachinesTableColumnsProps) => {
   const { t } = useTranslation();
+  const ability = useContext(AbilityContext);
   const columns = React.useMemo<GridColDef<MachineDto>[]>(
     () => [
       {
@@ -63,5 +66,10 @@ export const useMachinesTableColumns = ({
     ],
     [onDelete, t]
   );
-  return columns;
+  return columns.filter((column) => {
+    if (column.field === "actions") {
+      return ability.can(ACTIONS.DELETE, SUBJECTS.MACHINE);
+    }
+    return ability.can(ACTIONS.READ, SUBJECTS.MACHINE, column.field);
+  });
 };

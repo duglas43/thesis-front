@@ -4,6 +4,9 @@ import { MachinesControllerUpdateApiArg, MachineDto } from "../../api/machines";
 import * as yup from "yup";
 import { TextField, Button, Box, BoxProps } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Can } from "@src/entities/casl";
+import { SUBJECTS, ACTIONS } from "@src/shared/types";
+import { subject as an } from "@casl/ability";
 
 export interface MachineEditFormProps
   extends PickAllExcept<BoxProps, "onSubmit"> {
@@ -41,6 +44,8 @@ export const MachineEditForm: FC<MachineEditFormProps> = ({
       });
     },
   });
+  if (!initialValues) return null;
+  console.log("initialValues", initialValues);
   return (
     <Box
       component="form"
@@ -55,61 +60,96 @@ export const MachineEditForm: FC<MachineEditFormProps> = ({
       }}
       {...props}
     >
-      <TextField
-        fullWidth
-        id="name"
-        name="name"
-        label={t("name")}
-        type="text"
-        size="small"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.name}
-        disabled={!initialValues?.id}
-        error={formik.touched.name && !!formik.errors.name}
-        helperText={
-          formik.touched.name && formik.errors.name && formik.errors.name
-        }
-      />
-
-      <TextField
-        fullWidth
-        id="partNumber"
-        name="partNumber"
-        label={t("partNumber")}
-        type="partNumber"
-        size="small"
-        disabled={!initialValues?.id}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.partNumber}
-        error={!!formik.touched.partNumber && !!formik.errors.partNumber}
-        helperText={formik.touched.partNumber && formik.errors.partNumber}
-      />
-
-      <TextField
-        fullWidth
-        id="price"
-        name="price"
-        label={t("price")}
-        type="number"
-        size="small"
-        disabled={!initialValues?.id}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.price}
-        error={!!formik.touched.price && !!formik.errors.price}
-        helperText={formik.touched.price && formik.errors.price}
-      />
-
-      <Button
-        fullWidth
-        type="submit"
-        variant="contained"
-        disabled={formik.isSubmitting || !initialValues?.id}
+      <Can
+        I={ACTIONS.UPDATE}
+        this={an(SUBJECTS.MACHINE, { ...initialValues })}
+        field="name"
+        passThrough
       >
-        {t("save")}
-      </Button>
+        {(allowed) => (
+          <TextField
+            fullWidth
+            id="name"
+            name="name"
+            label={t("name")}
+            type="text"
+            size="small"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.name}
+            disabled={!allowed}
+            error={formik.touched.name && !!formik.errors.name}
+            helperText={
+              formik.touched.name && formik.errors.name && formik.errors.name
+            }
+          />
+        )}
+      </Can>
+
+      <Can
+        I={ACTIONS.UPDATE}
+        this={an(SUBJECTS.MACHINE, { ...initialValues })}
+        field="partNumber"
+        passThrough
+      >
+        {(allowed) => (
+          <TextField
+            fullWidth
+            id="partNumber"
+            name="partNumber"
+            label={t("partNumber")}
+            type="partNumber"
+            size="small"
+            disabled={!allowed}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.partNumber}
+            error={!!formik.touched.partNumber && !!formik.errors.partNumber}
+            helperText={formik.touched.partNumber && formik.errors.partNumber}
+          />
+        )}
+      </Can>
+
+      <Can
+        I={ACTIONS.UPDATE}
+        this={an(SUBJECTS.MACHINE, { ...initialValues })}
+        field="price"
+        passThrough
+      >
+        {(allowed) => (
+          <TextField
+            fullWidth
+            id="price"
+            name="price"
+            label={t("price")}
+            type="number"
+            size="small"
+            disabled={!allowed}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.price}
+            error={!!formik.touched.price && !!formik.errors.price}
+            helperText={formik.touched.price && formik.errors.price}
+          />
+        )}
+      </Can>
+
+      <Can
+        I={ACTIONS.UPDATE}
+        this={an(SUBJECTS.MACHINE, { ...initialValues })}
+        passThrough
+      >
+        {(allowed) => (
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            disabled={formik.isSubmitting || !initialValues?.id || !allowed}
+          >
+            {t("save")}
+          </Button>
+        )}
+      </Can>
     </Box>
   );
 };
